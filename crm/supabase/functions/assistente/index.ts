@@ -61,6 +61,36 @@ Deno.serve(responder(async (req) => {
       }
     }
 
+    // ------------------------------------------------ aprender com conversas de verdade
+    // O painel manda só os trechos já limpos (sem nome, telefone, e-mail nem link).
+    // A IA lê o jeito do corretor responder e escreve as regras de estilo.
+    // Nada é gravado aqui: volta para a tela, o corretor lê, corrige e salva.
+    case 'aprender': {
+      if (eu.papel !== 'admin') throw new ErroTela('Só o administrador treina a assistente.', 403);
+      const trechos = String(b.trechos ?? '').slice(0, 24000);
+      if (trechos.length < 200) throw new ErroTela('Poucas mensagens para aprender. Mande uma conversa com mais respostas suas.');
+      const atual = String(b.estilo_atual ?? '').slice(0, 4000);
+
+      const bruto = await pedirIA(
+        'Você observa como um corretor de imóveis brasileiro escreve no WhatsApp e descreve o jeito dele para que uma assistente ' +
+        'virtual escreva igual. Responda em português do Brasil, em texto simples, sem título, sem markdown e sem comentar a tarefa.',
+        [{ role: 'user', content:
+          'Abaixo estão trechos reais de conversas: a fala do cliente e a resposta do corretor.\n\n' +
+          'Escreva o GUIA DE ESTILO dele, assim:\n' +
+          '- 8 a 14 regras curtas, uma por linha, começando com verbo ("Responde em mensagens curtas, várias seguidas").\n' +
+          '- Cubra: tamanho das mensagens, gírias e palavras que ele repete, uso de emoji, pontuação (espaço antes de ! e ?), ' +
+          'como cumprimenta, como chama o cliente, como diz sim e como diz não, como fala de dinheiro e de prazo, como fecha assunto.\n' +
+          '- Depois uma linha em branco e "Frases típicas dele:" com 6 a 10 frases curtas copiadas ou muito parecidas com as dele.\n' +
+          '- Só descreva o que aparece nos trechos. Não invente, não dê conselho de vendas, não escreva regra genérica de atendimento.\n' +
+          (atual ? '\nJá existe este guia; mantenha o que continua verdadeiro e atualize o resto:\n"""' + atual + '"""\n' : '') +
+          '\nTRECHOS:\n"""' + trechos + '"""' }],
+        900);
+
+      const estilo = bruto.replace(/^```[a-z]*|```$/gm, '').trim();
+      if (!estilo) throw new ErroTela('A IA não conseguiu ler essas conversas. Tente com outra exportação.');
+      return json({ estilo });
+    }
+
     // ------------------------------------------------ rascunho de site
     case 'site': {
       if (eu.papel !== 'admin') throw new ErroTela('Só o administrador cria sites.', 403);
