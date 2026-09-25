@@ -65,6 +65,32 @@
                     placeholder="Ex.: chama pelo nome, fala curto, nunca promete desconto, usa 'a gente'."></textarea>
           <span class="ajuda" id="a-estilo-ajuda">Cole exemplos de mensagens suas: ela imita o jeito de escrever.</span>
         </div>
+
+        <div class="campo">
+          <label for="a-conversas">Aprender com conversas suas</label>
+          <p class="ajuda" id="a-conversas-ajuda">
+            No WhatsApp: abra a conversa → <b>Exportar conversa</b> → <b>Sem mídia</b>. Mande o .zip ou o .txt aqui (pode mandar vários).
+            Os arquivos são lidos no seu computador e para a IA vai só o diálogo — sem nome, telefone, e-mail ou link.
+            Ela lê o seu jeito de responder e reescreve o texto acima; você confere antes de salvar.
+          </p>
+          <input id="a-conversas" type="file" accept=".zip,.txt,.md" multiple (change)="escolherConversas($event)"
+                 aria-describedby="a-conversas-ajuda" />
+          @if (resumoLidas()) {
+            <p class="linha" role="status">
+              <span>{{ resumoLidas() }} carregada(s).</span>
+              <button class="btn" type="button" (click)="limparConversas()">Limpar</button>
+            </p>
+          }
+          <div class="linha">
+            <button class="btn" type="button" (click)="aprenderComConversas()"
+                    [disabled]="aprendendo() || !lidas().length">
+              {{ aprendendo() ? 'Lendo suas conversas…' : 'Aprender com estas conversas' }}
+            </button>
+            @if (estiloAnterior() !== null) {
+              <button class="btn" type="button" (click)="desfazerAprendizado()">Voltar ao texto anterior</button>
+            }
+          </div>
+        </div>
         <div><button class="btn primario" type="submit" [disabled]="salvando()">Salvar</button></div>
       </form>
     </section>

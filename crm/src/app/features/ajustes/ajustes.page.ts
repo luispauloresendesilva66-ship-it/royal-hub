@@ -10,6 +10,7 @@ import { SUPABASE } from '../../core/supabase/supabase.client';
 import { AvisosService } from '../../core/ui/avisos.service';
 import { AbasDirective } from '../../shared/ui/abas.directive';
 import { MascaraDirective } from '../../shared/ui/mascara.directive';
+import { ConversaLida, contarFalas, lerArquivos, trechosParaTreino } from '../../shared/conversas-exportadas';
 
 type Aba = 'imobiliaria' | 'assistente' | 'whatsapp' | 'captacao' | 'portais';
 
@@ -42,6 +43,16 @@ export default class AjustesPage {
   protected readonly carregado = signal(false);
 
   protected wa = { numero: '', token: '', verificacao: '' };
+
+  // treinar a assistente com conversas exportadas do WhatsApp
+  protected readonly lidas = signal<ConversaLida[]>([]);
+  protected readonly aprendendo = signal(false);
+  protected readonly estiloAnterior = signal<string | null>(null);
+  protected readonly resumoLidas = computed(() => {
+    const c = contarFalas(this.lidas());
+    if (!c.conversas) return '';
+    return `${c.conversas} conversa${c.conversas > 1 ? 's' : ''} · ${c.suas} resposta${c.suas > 1 ? 's' : ''} sua${c.suas > 1 ? 's' : ''}`;
+  });
   protected readonly token = signal('');
   protected readonly imoveis = signal<Imovel[]>([]);
 
@@ -119,6 +130,49 @@ export default class AjustesPage {
     }))) return;
     try { this.token.set(await this.cfgSrv.tokenWebhook(trocar)); if (trocar) this.avisos.ok('Token trocado.'); }
     catch (e) { this.avisos.erro(e); }
+  }
+
+  /* ---------------- treinar com conversas ----------------
+     Os arquivos são lidos aqui no navegador. Para a IA vai só o diálogo já
+     limpo — sem nome de cliente, telefone, e-mail, link nem número longo. */
+  protected async escolherConversas(ev: Event) {
+    const alvo = ev.target as HTMLInputElement;
+    const arquivos = Array.from(alvo.files ?? []);
+    if (!arquivos.length) return;
+    try {
+      const lidas = await lerArquivos(arquivos);
+      if (!lidas.length) throw new Error('Não achei conversa nesses arquivos. Exporte pelo WhatsApp em "Conversa → Exportar conversa → Sem mídia".');
+      this.lidas.set([...this.lidas(), ...lidas]);
+    } catch (e) {
+      this.avisos.erro(e);
+    } finally {
+      alvo.value = '';
+    }
+  }
+
+  protected limparConversas() { this.lidas.set([]); }
+
+  protected async aprenderComConversas() {
+    const trechos = trechosParaTreino(this.lidas());
+    if (trechos.length < 200) { this.avisos.erro(new Error('Poucas respostas suas nessas conversas para a IA aprender.')); return; }
+    this.aprendendo.set(true);
+    try {
+      const r = await this.cfgSrv.ia<{ estilo: string }>({ acao: 'aprender', trechos, estilo_atual: this.f.estilo ?? '' });
+      this.estiloAnterior.set(this.f.estilo ?? '');
+      this.f.estilo = r.estilo;
+      this.avisos.ok('Pronto. Leia o texto abaixo, ajuste o que quiser e clique em Salvar.');
+    } catch (e) {
+      this.avisos.erro(e);
+    } finally {
+      this.aprendendo.set(false);
+    }
+  }
+
+  protected desfazerAprendizado() {
+    const anterior = this.estiloAnterior();
+    if (anterior === null) return;
+    this.f.estilo = anterior;
+    this.estiloAnterior.set(null);
   }
 
   protected copiar(t: string) { this.avisos.copiar(t); }
