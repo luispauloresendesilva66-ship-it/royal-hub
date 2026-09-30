@@ -47,7 +47,7 @@ export default class ConversasPage {
     return this.lista().filter((c) =>
       (!t || semAcento(`${c.nome} ${c.telefone} ${c.ultima}`).includes(t)) && (!this.soNaoLidas() || c.nao_lidas > 0));
   });
-  protected readonly podeEnviar = computed(() => { const c = this.cfg.config(); return !!c && (c.wa_configurado || c.wa_canal === 'ponte'); });
+  protected readonly podeEnviar = computed(() => { const c = this.cfg.config(); return !!c && (c.wa_configurado || c.wa_canal === 'ponte' || c.wa_canal === 'evolution'); });
 
   constructor() {
     void this.carregar();

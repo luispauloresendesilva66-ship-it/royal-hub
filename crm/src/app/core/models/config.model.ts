@@ -19,8 +19,8 @@ export interface Config {
   wa_numero_id: string;
   wa_verificacao: string;
   wa_configurado: boolean;
-  /** Por onde o WhatsApp está ligado: API oficial da Meta ou a ponte por QR code. */
-  wa_canal: 'oficial' | 'ponte';
+  /** Por onde o WhatsApp está ligado: API oficial da Meta, ponte por QR code ou Evolution API (QR pelo painel). */
+  wa_canal: 'oficial' | 'ponte' | 'evolution';
   ponte_visto_em: string | null;
   /** QR pendente de escanear (a ponte manda; some ao conectar) e o número que conectou. */
   ponte_qr: string | null;

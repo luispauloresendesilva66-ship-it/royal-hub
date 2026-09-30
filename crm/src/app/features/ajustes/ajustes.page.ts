@@ -61,15 +61,41 @@ export default class AjustesPage {
   protected ponteViva() { const v = this.ponte()?.ponte_visto_em; return !!v && Date.now() - new Date(v).getTime() < 3 * 60000; }
   /** QR válido por pouco tempo: a ponte manda um novo a cada ~20 s enquanto ninguém escaneia. */
   protected qrFresco() { const p = this.ponte(); return !!p?.ponte_qr && !!p.ponte_qr_em && Date.now() - new Date(p.ponte_qr_em).getTime() < 90000; }
-  protected waLigado() { return this.f.wa_canal === 'ponte' ? this.ponteViva() : !!this.f.wa_configurado; }
+  /** Evolution: conectada = o servidor avisou "open" (ponte_visto_em preenchido); sem o relógio de 3 min da ponte. */
+  protected evoLigada() { return !!this.ponte()?.ponte_visto_em; }
+  protected readonly conectando = signal(false);
+  protected waLigado() {
+    return this.f.wa_canal === 'evolution' ? this.evoLigada() : this.f.wa_canal === 'ponte' ? this.ponteViva() : !!this.f.wa_configurado;
+  }
   protected estadoWa() {
+    if (this.f.wa_canal === 'evolution') return this.evoLigada() ? 'Ligado' : this.qrFresco() ? 'Escaneie o QR' : 'Desligado';
     if (this.f.wa_canal !== 'ponte') return this.f.wa_configurado ? 'Ligado' : 'Desligado';
     return this.ponteViva() ? 'Ligado' : this.qrFresco() ? 'Escaneie o QR' : 'Esperando a ponte';
   }
 
-  /** Enquanto o canal for a ponte, relê o estado a cada 4 s (o QR troca sozinho e some ao conectar). */
+  /** Gera o QR da instância desta empresa na Evolution API (ou um novo, se o anterior venceu). */
+  protected async conectarEvolution() {
+    this.conectando.set(true);
+    try {
+      this.f.wa_canal = 'evolution';
+      await this.cfgSrv.whatsappEvolution('evo_conectar');
+      await this.lerPonte();
+    } catch (e) { this.avisos.erro(e); } finally { this.conectando.set(false); }
+  }
+
+  protected async desconectarEvolution() {
+    if (!confirm('Desconectar o WhatsApp desta empresa? A assistente para de responder até você conectar de novo.')) return;
+    this.conectando.set(true);
+    try {
+      await this.cfgSrv.whatsappEvolution('evo_desconectar');
+      await this.lerPonte();
+      this.avisos.ok('WhatsApp desconectado.');
+    } catch (e) { this.avisos.erro(e); } finally { this.conectando.set(false); }
+  }
+
+  /** Enquanto o canal for a ponte ou a Evolution, relê o estado a cada 4 s (o QR troca sozinho e some ao conectar). */
   private acompanharPonte() {
-    const relogio = setInterval(() => { if (this.f.wa_canal === 'ponte' && document.visibilityState === 'visible') void this.lerPonte(); }, 4000);
+    const relogio = setInterval(() => { if (this.f.wa_canal !== 'oficial' && document.visibilityState === 'visible') void this.lerPonte(); }, 4000);
     this.destroy.onDestroy(() => clearInterval(relogio));
   }
 
@@ -94,7 +120,7 @@ export default class AjustesPage {
     this.f.wa_canal = canal;
     try {
       await this.cfgSrv.salvar({ wa_canal: canal });
-      this.avisos.ok(canal === 'ponte' ? 'WhatsApp por QR code. Ligue a ponte no computador.' : 'WhatsApp pela API oficial da Meta.');
+      this.avisos.ok(canal === 'evolution' ? 'Clique em "Conectar WhatsApp" para gerar o QR.' : canal === 'ponte' ? 'WhatsApp por QR code. Ligue a ponte no computador.' : 'WhatsApp pela API oficial da Meta.');
     } catch (e) {
       this.avisos.erro(e);
     }

@@ -8,11 +8,12 @@
 //   POST ?empresa=<slug> {acao:'ponte_pendentes'} → a ponte pergunta o que o painel e as retomadas deixaram para enviar
 //   As ações da ponte exigem o header x-ponte-token = token do webhook da empresa (Ajustes → Captação).
 import type { SupabaseClient } from 'npm:@supabase/supabase-js@2';
-import { ErroTela, admin, agoraSP, comoUsuario, configDa, empresaPorSlug, json, quemChamou, responder, telefoneChave, telefoneNormal } from '../_shared/comum.ts';
+import { ErroTela, admin, agoraSP, comoUsuario, configDa, empresaPorSlug, json, quemChamou, responder, telefoneChave, telefoneNormal, type Perfil } from '../_shared/comum.ts';
 import { Msg, aplicarMarcadores, carteira, iaConfigurada, imoveisQueServem, instrucoes, leadDoTelefone, lerMarcadores, pedirIA, preferenciaIA } from '../_shared/ia.ts';
+import { evo, evoOk, evolutionConfigurada, nomeInstancia } from '../_shared/evolution.ts';
 
 type DB = SupabaseClient<any, 'crm'>;
-interface Empresa { id: string; nome: string }
+interface Empresa { id: string; nome: string; slug?: string }
 const API = 'https://graph.facebook.com/v21.0';
 const PAUSA_HORAS = 6;
 const SITE = () => (Deno.env.get('SITE_URL') ?? '').replace(/\/+$/, '');
@@ -54,6 +55,27 @@ const canalFila = (db: DB, empresaId: string, conversaId: string | null): Canal 
   imagem: async (telefone, link, texto) => { await db.from('fila_whatsapp').insert({ empresa_id: empresaId, conversa_id: conversaId, telefone, tipo: 'imagem', texto, link }); },
 });
 const usaPonte = (cfg: Record<string, any>) => cfg.wa_canal === 'ponte';
+const usaEvolution = (cfg: Record<string, any>) => cfg.wa_canal === 'evolution';
+const dormir = (ms: number) => new Promise((r) => setTimeout(r, ms));
+const entre = (a: number, b: number) => Math.floor(a + Math.random() * (b - a));
+
+/** Direto pela Evolution API da empresa. `esperaInicial`: pausa de gente antes da 1ª resposta (só ao atender cliente). */
+function canalEvolution(slug: string, esperaInicial = false): Canal {
+  const inst = nomeInstancia(slug);
+  let primeira = esperaInicial;
+  const esperar = async () => { if (primeira) { primeira = false; await dormir(entre(3000, 8000)); } };
+  return {
+    texto: async (para, texto) => {
+      await esperar();
+      await evoOk('POST', `/message/sendText/${inst}`, { number: para, text: texto.slice(0, 4000), delay: entre(1500, 4000) });
+    },
+    imagem: async (para, link, legenda) => {
+      await esperar();
+      const r = await evo('POST', `/message/sendMedia/${inst}`, { number: para, mediatype: 'image', media: link, caption: legenda.slice(0, 1000), delay: entre(1500, 4000) });
+      if (!r.ok) await evoOk('POST', `/message/sendText/${inst}`, { number: para, text: legenda.slice(0, 4000) }); // sem a foto, vai só o texto
+    },
+  };
+}
 const metaPronta = (cfg: Record<string, any>) => !!(cfg.wa_configurado && cfg.wa_token);
 
 // ---------------------------------------------------------------- conversa
@@ -239,11 +261,12 @@ async function retomadasDa(db: DB, emp: Empresa, cfg: Record<string, any>, canal
 /** O agendador: todas as empresas. Pela Meta manda na hora; pela ponte deixa na fila. */
 async function retomadas(db: DB) {
   if (!horarioDeRetomar()) return { enviadas: 0, motivo: 'fora do horário comercial' };
-  const { data: empresas } = await db.from('empresas').select('id, nome').eq('ativa', true);
+  const { data: empresas } = await db.from('empresas').select('id, nome, slug').eq('ativa', true);
   let enviadas = 0;
   for (const emp of empresas ?? []) {
     const cfg = await configDa(db, emp.id);
-    if (usaPonte(cfg)) enviadas += await retomadasDa(db, emp, cfg, (c) => canalFila(db, emp.id, c.id));
+    if (usaEvolution(cfg)) { if (cfg.ponte_visto_em) enviadas += await retomadasDa(db, emp, cfg, () => canalEvolution(emp.slug)); }
+    else if (usaPonte(cfg)) enviadas += await retomadasDa(db, emp, cfg, (c) => canalFila(db, emp.id, c.id));
     else if (metaPronta(cfg)) enviadas += await retomadasDa(db, emp, cfg, () => canalMeta(cfg));
   }
   return { enviadas };
@@ -298,6 +321,116 @@ async function pontePendentes(db: DB, empresa: Empresa) {
   return { envios, canal: cfg.wa_canal ?? 'oficial', assistente_ligada: !!cfg.bot_ligado };
 }
 
+// ---------------------------------------------------------------- Evolution API (uma instância por empresa)
+const EVENTOS_EVO = ['MESSAGES_UPSERT', 'CONNECTION_UPDATE', 'QRCODE_UPDATED'];
+
+/** A Evolution se identifica com o header x-evo-token = token do webhook da empresa (definido na criação da instância). */
+async function evoAutorizada(db: DB, req: Request, empresa: Empresa) {
+  const token = req.headers.get('x-evo-token') ?? '';
+  const { data: seg } = await db.from('config_segredos').select('webhook_token').eq('empresa_id', empresa.id).single();
+  if (!token || !seg?.webhook_token || token !== seg.webhook_token) throw new ErroTela('Token inválido.', 401);
+}
+
+function webhookEvo(slug: string, token: string) {
+  return {
+    url: `${Deno.env.get('SUPABASE_URL')}/functions/v1/whatsapp?empresa=${encodeURIComponent(slug)}`,
+    byEvents: false, base64: false, headers: { 'x-evo-token': token }, events: EVENTOS_EVO,
+  };
+}
+
+/** Painel: cria (ou reaproveita) a instância da empresa e guarda o QR para a tela mostrar. */
+async function evoConectar(db: DB, eu: Perfil, slug: string) {
+  if (!evolutionConfigurada()) throw new ErroTela('A Evolution API não está configurada no servidor.', 503);
+  if (eu.papel !== 'admin') throw new ErroTela('Só o administrador liga o WhatsApp.', 403);
+  const cfg = await configDa(db, eu.empresa_id);
+  const inst = nomeInstancia(slug);
+  const webhook = webhookEvo(slug, cfg.webhook_token);
+
+  let code: string | null = null;
+  const criada = await evo('POST', '/instance/create', {
+    instanceName: inst, integration: 'WHATSAPP-BAILEYS', qrcode: true,
+    groupsIgnore: true, alwaysOnline: false, readMessages: false, syncFullHistory: false, webhook,
+  });
+  if (criada.status >= 500) throw new ErroTela('O servidor do WhatsApp está desligado ou inacessível. Confira se o computador está ligado.', 503);
+  if (criada.ok) code = criada.json?.qrcode?.code ?? null;
+  else {
+    // já existe: garante o webhook e pede um QR novo
+    await evo('POST', `/webhook/set/${inst}`, { webhook: { enabled: true, ...webhook } });
+    const c = await evo('GET', `/instance/connect/${inst}`);
+    if (!c.ok) throw new ErroTela('Não consegui gerar o QR (' + c.status + ').', 502);
+    code = c.json?.code ?? null;
+  }
+  await db.from('config').update({ wa_canal: 'evolution', ponte_qr: code, ponte_qr_em: code ? new Date().toISOString() : null }).eq('empresa_id', eu.empresa_id);
+  return { ok: true, qr: !!code };
+}
+
+/** Painel: sai do WhatsApp e apaga a instância (o próximo "conectar" começa do zero, com outro número se quiser). */
+async function evoDesconectar(db: DB, eu: Perfil, slug: string) {
+  if (eu.papel !== 'admin') throw new ErroTela('Só o administrador desliga o WhatsApp.', 403);
+  const inst = nomeInstancia(slug);
+  await evo('DELETE', `/instance/logout/${inst}`).catch(() => null);
+  await evo('DELETE', `/instance/delete/${inst}`).catch(() => null);
+  await db.from('config').update({ ponte_qr: null, ponte_qr_em: null, ponte_visto_em: null, ponte_numero: '' }).eq('empresa_id', eu.empresa_id);
+  return { ok: true };
+}
+
+const textoDeEvo = (m: any) => {
+  const c = m.message ?? {};
+  const legenda = c.imageMessage?.caption || c.videoMessage?.caption || c.documentMessage?.caption || '';
+  const texto = c.conversation || c.extendedTextMessage?.text || legenda;
+  const midia = c.imageMessage ? '[foto]' : c.audioMessage ? '[áudio]' : c.documentMessage ? '[documento]' : c.videoMessage ? '[vídeo]' : '';
+  return { texto: texto || midia, soTexto: !!texto };
+};
+
+async function evoMensagem(db: DB, empresa: Empresa, cfg: Record<string, any>, m: any) {
+  const k = m.key ?? {};
+  let jid = String(k.remoteJid ?? '');
+  if (jid.endsWith('@lid')) jid = String(k.remoteJidAlt ?? m.senderPn ?? '');   // número real por trás do @lid
+  if (!jid.endsWith('@s.whatsapp.net')) return;                                  // grupos, status, canais: fora
+  const tel = telefoneNormal(jid.split('@')[0]);
+  const { texto, soTexto } = textoDeEvo(m);
+  if (!tel || !texto.trim()) return;
+
+  if (k.fromMe) {
+    // eco do que a própria assistente/painel acabou de mandar pela API: não é "você assumiu"
+    const conversa = await conversaDo(db, empresa.id, tel, '');
+    const desde = new Date(Date.now() - 3 * 60000).toISOString();
+    const { data: recentes } = await db.from('mensagens').select('texto').eq('conversa_id', conversa.id).in('de', ['bot', 'voce']).gte('criado_em', desde).limit(15);
+    if ((recentes ?? []).some((x: any) => String(x.texto).startsWith(texto.slice(0, 60)) || texto.startsWith(String(x.texto).slice(0, 60)))) return;
+    await gravar(db, conversa, 'voce', texto);                                   // você escreveu pelo celular: a assistente recua
+    return;
+  }
+  if (!usaEvolution(cfg)) return;
+  evo('POST', `/chat/markMessageAsRead/${nomeInstancia(empresa.slug!)}`, { readMessages: [{ remoteJid: k.remoteJid, fromMe: false, id: k.id }] }).catch(() => null);
+  const motivo = await atenderCliente(db, empresa, cfg, tel, String(m.pushName ?? '').slice(0, 120), texto.trim(), canalEvolution(empresa.slug!, true), soTexto);
+  if (motivo) console.log(`sem resposta (${motivo})`);
+}
+
+async function evoEntrada(db: DB, empresa: Empresa, corpo: any) {
+  const cfg = await configDa(db, empresa.id);
+  const evento = String(corpo.event ?? '').toLowerCase().replace(/_/g, '.');
+  const d = corpo.data ?? {};
+  const agora = new Date().toISOString();
+
+  if (evento === 'qrcode.updated') {
+    const code = d.qrcode?.code ?? d.code;
+    if (code) await db.from('config').update({ ponte_qr: String(code).slice(0, 1000), ponte_qr_em: agora }).eq('empresa_id', empresa.id);
+  } else if (evento === 'connection.update') {
+    if (d.state === 'open') {
+      let numero = '';
+      const r = await evo('GET', `/instance/fetchInstances?instanceName=${nomeInstancia(empresa.slug!)}`).catch(() => null);
+      const dono = Array.isArray(r?.json) ? (r!.json[0]?.ownerJid ?? r!.json[0]?.instance?.owner) : null;
+      if (dono) numero = String(dono).split('@')[0].split(':')[0].replace(/\D/g, '').slice(0, 20);
+      await db.from('config').update({ ponte_qr: null, ponte_qr_em: null, ponte_visto_em: agora, ponte_numero: numero }).eq('empresa_id', empresa.id);
+    } else if (d.state === 'close') {
+      const saiu = Number(d.statusReason) === 401;                              // deslogou no celular
+      await db.from('config').update(saiu ? { ponte_qr: null, ponte_qr_em: null, ponte_visto_em: null, ponte_numero: '' } : { ponte_visto_em: null }).eq('empresa_id', empresa.id);
+    }
+  } else if (evento === 'messages.upsert') {
+    for (const m of Array.isArray(d) ? d : [d]) await evoMensagem(db, empresa, cfg, m).catch((e) => console.error('evolution:', e));
+  }
+}
+
 // ---------------------------------------------------------------- assinatura da Meta (opcional)
 async function assinaturaOk(req: Request, bruto: string) {
   const segredo = Deno.env.get('META_APP_SECRET');
@@ -335,7 +468,10 @@ Deno.serve(responder(async (req) => {
     const { data: c } = await db.from('conversas').select('*').eq('id', corpo.conversa_id).maybeSingle();
     if (!visivel || !c || c.empresa_id !== eu.empresa_id) throw new ErroTela('Conversa não encontrada.', 404);
     const cfg = await configDa(db, eu.empresa_id);
-    if (usaPonte(cfg)) await canalFila(db, eu.empresa_id, c.id).texto(c.telefone, texto);
+    if (usaEvolution(cfg)) {
+      const { data: emp } = await db.from('empresas').select('slug').eq('id', eu.empresa_id).single();
+      await canalEvolution(emp!.slug).texto(c.telefone, texto);
+    } else if (usaPonte(cfg)) await canalFila(db, eu.empresa_id, c.id).texto(c.telefone, texto);
     else if (metaPronta(cfg)) await canalMeta(cfg).texto(c.telefone, texto);
     else throw new ErroTela('Ligue o WhatsApp em Ajustes primeiro.');
     await gravar(db, c, 'voce', texto, eu.id);
@@ -347,6 +483,25 @@ Deno.serve(responder(async (req) => {
     const segredo = Deno.env.get('CRON_SECRET');
     if (!segredo || req.headers.get('x-cron-secret') !== segredo) throw new ErroTela('proibido', 403);
     return json(await retomadas(db));
+  }
+
+  // ---- o painel ligando/desligando o WhatsApp da empresa (Evolution API)
+  if (corpo.acao === 'evo_conectar' || corpo.acao === 'evo_desconectar') {
+    const eu = await quemChamou(req, db);
+    const { data: emp } = await db.from('empresas').select('slug').eq('id', eu.empresa_id).single();
+    return json(corpo.acao === 'evo_conectar' ? await evoConectar(db, eu, emp!.slug) : await evoDesconectar(db, eu, emp!.slug));
+  }
+
+  // ---- a Evolution API avisando (mensagem, QR, conexão)
+  if (corpo.event && corpo.instance) {
+    const empresa = await empresaPorSlug(db, url.searchParams.get('empresa'));
+    if (!empresa) return new Response('ok');
+    await evoAutorizada(db, req, empresa);
+    if (corpo.instance !== nomeInstancia(empresa.slug!)) return new Response('ok');
+    const trabalho = evoEntrada(db, empresa, corpo).catch((e) => console.error('evolution:', e));
+    const er = (globalThis as any).EdgeRuntime;
+    if (er?.waitUntil) er.waitUntil(trabalho); else await trabalho;
+    return new Response('ok');
   }
 
   // ---- a ponte (QR code) conversando com o sistema

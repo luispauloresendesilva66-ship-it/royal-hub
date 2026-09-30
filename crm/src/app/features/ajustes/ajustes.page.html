@@ -43,16 +43,41 @@
     <div class="campo">
       <label for="w-canal">Como está ligado</label>
       <select id="w-canal" name="canal" [ngModel]="f.wa_canal" (ngModelChange)="mudarCanal($event)" aria-describedby="w-canal-ajuda">
+        <option value="evolution">QR code pelo painel (recomendado)</option>
         <option value="ponte">QR code (ponte num computador ligado)</option>
         <option value="oficial">Oficial (API da Meta)</option>
       </select>
       <span class="ajuda" id="w-canal-ajuda">
-        @if (f.wa_canal === 'ponte') { Igual ao sistema antigo: escaneia o QR uma vez num computador que fica ligado. }
+        @if (f.wa_canal === 'evolution') { Você só escaneia o QR aqui: o servidor do Royal Hub cuida do resto. }
+        @else if (f.wa_canal === 'ponte') { Igual ao sistema antigo: escaneia o QR uma vez num computador que fica ligado. }
         @else { Número da Meta: sem computador ligado e sem risco de bloqueio. }
       </span>
     </div>
 
-    @if (f.wa_canal === 'ponte') {
+    @if (f.wa_canal === 'evolution') {
+      @if (evoLigada()) {
+        <p class="aviso info" role="status">Conectado{{ ponte()?.ponte_numero ? ' ao número ' + ponte()?.ponte_numero : '' }}. A assistente responde por esse WhatsApp conforme as regras da tela Assistente.</p>
+        <div><button type="button" class="btn" (click)="desconectarEvolution()" [disabled]="conectando()">Desconectar / trocar número</button></div>
+      } @else {
+        @if (qrImagem()) {
+          <div class="qr" role="status" aria-live="polite">
+            <img [src]="qrImagem()" width="240" height="240" alt="QR code para conectar o WhatsApp" />
+            <div>
+              <b>Escaneie com o celular</b>
+              <ol class="passos">
+                <li>Abra o WhatsApp e toque em <b>⋮</b> (Android) ou <b>Configurações</b> (iPhone).</li>
+                <li><b>Aparelhos conectados</b> → <b>Conectar aparelho</b>.</li>
+                <li>Aponte a câmera para este código.</li>
+              </ol>
+              <span class="ajuda">O código troca sozinho a cada poucos segundos. Ao conectar, ele some daqui.</span>
+            </div>
+          </div>
+        } @else {
+          <p class="aviso" role="status">WhatsApp desligado. Clique em conectar para gerar o QR code.</p>
+        }
+        <div><button type="button" class="btn primario" (click)="conectarEvolution()" [disabled]="conectando()">{{ qrImagem() ? 'Gerar novo QR' : 'Conectar WhatsApp' }}</button></div>
+      }
+    } @else if (f.wa_canal === 'ponte') {
       <div class="campo">
         <span class="rotulo">Token da ponte</span>
         <div class="linha sem-quebra">

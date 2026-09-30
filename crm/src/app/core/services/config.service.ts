@@ -48,6 +48,13 @@ export class ConfigService {
     return `${environment.supabaseUrl}/functions/v1/${nome}`;
   }
 
+  /** Liga (gera o QR) ou desliga o WhatsApp desta empresa pela Evolution API. */
+  async whatsappEvolution(acao: 'evo_conectar' | 'evo_desconectar'): Promise<void> {
+    const { data, error } = await this.db.functions.invoke('whatsapp', { body: { acao } });
+    if (error) throw new Error(await mensagemDaFuncao(error, 'Não consegui falar com o servidor do WhatsApp.'));
+    if (data?.erro) throw new Error(data.erro);
+  }
+
   /** Assistente de IA (Edge Function "assistente"). */
   async ia<T = { texto: string }>(corpo: Record<string, unknown>): Promise<T> {
     const { data, error } = await this.db.functions.invoke('assistente', { body: corpo });
