@@ -1,0 +1,113 @@
+{
+ "home-1440": {
+  "url": "http://localhost:4331/",
+  "axe": [],
+  "erros": [],
+  "scrollWidth": 1440
+ },
+ "home-375": {
+  "url": "http://localhost:4331/",
+  "axe": [],
+  "erros": [],
+  "scrollWidth": 375
+ },
+ "painel-1440": {
+  "url": "http://localhost:4331/painel",
+  "axe": [],
+  "erros": [],
+  "scrollWidth": 1440
+ },
+ "painel-375": {
+  "url": "http://localhost:4331/painel",
+  "erros": [],
+  "scrollWidth": 375
+ },
+ "leads-1440": {
+  "url": "http://localhost:4331/leads",
+  "axe": [],
+  "erros": [],
+  "scrollWidth": 1440
+ },
+ "leads-375": {
+  "url": "http://localhost:4331/leads",
+  "erros": [],
+  "scrollWidth": 375
+ },
+ "leads-ficha-1440": {
+  "url": "http://localhost:4331/leads",
+  "axe": [],
+  "erros": [],
+  "scrollWidth": 1440
+ },
+ "leads-ficha-375": {
+  "url": "http://localhost:4331/leads",
+  "erros": [],
+  "scrollWidth": 375
+ },
+ "pipeline-1440": {
+  "url": "http://localhost:4331/pipeline",
+  "axe": [],
+  "erros": [],
+  "scrollWidth": 1440
+ },
+ "pipeline-375": {
+  "url": "http://localhost:4331/pipeline",
+  "erros": [],
+  "scrollWidth": 375
+ },
+ "conversas-1440": {
+  "url": "http://localhost:4331/conversas",
+  "axe": [],
+  "erros": [],
+  "scrollWidth": 1440
+ },
+ "conversas-375": {
+  "url": "http://localhost:4331/conversas",
+  "erros": [],
+  "scrollWidth": 375
+ },
+ "conversas-aberta-1440": {
+  "url": "http://localhost:4331/conversas",
+  "axe": [],
+  "erros": [],
+  "scrollWidth": 1440
+ },
+ "conversas-aberta-375": {
+  "url": "http://localhost:4331/conversas",
+  "erros": [],
+  "scrollWidth": 375
+ },
+ "imoveis-1440": {
+  "url": "http://localhost:4331/imoveis",
+  "axe": [],
+  "erros": [],
+  "scrollWidth": 1440
+ },
+ "imoveis-375": {
+  "url": "http://localhost:4331/imoveis",
+  "erros": [],
+  "scrollWidth": 375
+ },
+ "imoveis-form-1440": {
+  "url": "http://localhost:4331/imoveis",
+  "axe": [],
+  "erros": [],
+  "scrollWidth": 1440
+ },
+ "imoveis-form-375": {
+  "url": "http://localhost:4331/imoveis",
+  "erros": [],
+  "scrollWidth": 375
+ },
+ "ajustes-1440": {
+  "url": "http://localhost:4331/ajustes",
+  "axe": [],
+  "erros": [],
+  "scrollWidth": 1440
+ },
+ "ajustes-375": {
+  "url": "http://localhost:4331/ajustes",
+  "erros": [],
+  "scrollWidth": 375
+ }
+}

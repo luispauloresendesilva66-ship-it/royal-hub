@@ -3,17 +3,17 @@
 .tabela { min-width: 1040px; }
 td.mono, td.num, td:has(.etiqueta), td:has(.etapa) { white-space: nowrap; }
 th:first-child, td:first-child { min-width: 190px; }
-.nome-lead { all: unset; cursor: pointer; font-weight: 600; color: var(--navy-700);
+.nome-lead { all: unset; cursor: pointer; font-weight: 600; color: var(--cor-destaque);
   &:hover { text-decoration: underline; }
   &:focus-visible { box-shadow: var(--foco); border-radius: 2px; } }
 tr.clicavel { cursor: pointer; }
 td.contato { white-space: nowrap; }
-.whats { margin-left: 8px; font: 500 11px/1 var(--sans); color: var(--ganho); text-decoration: none; padding: 3px 7px; border: 1px solid var(--ganho-200); border-radius: 999px;
-  &:hover { background: var(--ganho-100); } }
-td small { display: block; font-size: 11px; }
+.whats { margin-left: var(--esp-2); font: 500 var(--texto-2xs)/1 var(--sans); color: var(--cor-ganho); text-decoration: none; padding: 3px var(--esp-2); border: 1px solid var(--cor-ganho-borda); border-radius: var(--raio-pilula);
+  &:hover { background: var(--cor-ganho-fundo); } }
+td small { display: block; font-size: var(--texto-2xs); }
 td.corta { max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.etapa { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
-  i { width: 8px; height: 8px; border-radius: 2px; } }
+.etapa { display: inline-flex; align-items: center; gap: var(--esp-1-5); white-space: nowrap;
+  i { width: 8px; height: 8px; border-radius: 2px; background: var(--cor-etapa-visivel); } }
 
-.paginacao { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px;
-  .por-pagina { flex-direction: row; align-items: center; gap: 8px; select { width: auto; } } }
+.paginacao { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--esp-2-5); margin-top: var(--esp-3);
+  .por-pagina { flex-direction: row; align-items: center; gap: var(--esp-2); select { width: auto; } } }

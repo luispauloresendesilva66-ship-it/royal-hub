@@ -15,9 +15,9 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
            [attr.aria-hidden]="somenteSimbolo() ? null : 'true'" focusable="false">
         <defs>
           <linearGradient [attr.id]="id" x1="0" y1="0" x2="0.2" y2="1">
-            <stop offset="0" stop-color="#E0BE6B" />
-            <stop offset="0.55" stop-color="#C9A227" />
-            <stop offset="1" stop-color="#A97E1E" />
+            <stop offset="0" style="stop-color: var(--ouro-300)" />
+            <stop offset="0.55" style="stop-color: var(--ouro-500)" />
+            <stop offset="1" style="stop-color: var(--ouro-700)" />
           </linearGradient>
         </defs>
         <g [attr.stroke]="'url(#' + id + ')'" [attr.fill]="'url(#' + id + ')'"
@@ -59,12 +59,12 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
       display: inline-flex; align-items: baseline; gap: .28em;
       font-family: var(--serif); font-size: calc(var(--altura, 34px) * .5);
       font-weight: 600; letter-spacing: .07em; text-transform: uppercase; white-space: nowrap;
-      b { font-weight: 600; color: var(--navy-900); }
-      i { font-style: normal; font-weight: 600; color: #A97E1E; }
+      b { font-weight: 600; color: var(--cor-titulo); }
+      i { font-style: normal; font-weight: 600; color: var(--ouro-700); }
     }
     .escuro .palavra {
-      b { color: #fff; }
-      i { color: #E0BE6B; }
+      b { color: var(--branco); }
+      i { color: var(--ouro-300); }
     }
   `,
 })

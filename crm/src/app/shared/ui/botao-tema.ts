@@ -20,11 +20,11 @@ import { TemaService } from '../../core/ui/tema.service';
   `,
   styles: `
     :host { display: inline-flex; }
-    .tema { gap: 6px; }
-    .tema.claro { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 8px; margin-left: -8px;
-      border-radius: 6px; color: var(--lateral-texto); font-size: 12.5px;
-      &:hover { color: var(--lateral-forte); background: rgba(255, 255, 255, .06); }
-      &:focus-visible { box-shadow: 0 0 0 2px var(--ouro-300); } }
+    .tema { gap: var(--esp-1-5); }
+    .tema.claro { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: var(--esp-1-5); min-height: 32px; padding: 0 var(--esp-2); margin-left: calc(-1 * var(--esp-2));
+      border-radius: var(--raio-sm); color: var(--cor-lateral-texto); font-size: var(--texto-xs);
+      &:hover { color: var(--cor-lateral-forte); background: var(--cor-sobre-marca-hover); }
+      &:focus-visible { box-shadow: 0 0 0 2px var(--cor-marca-clara); } }
   `,
 })
 export class BotaoTema {

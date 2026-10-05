@@ -1,13 +1,13 @@
-.cartao { display: flex; flex-direction: column; gap: 12px; }
+.cartao { display: flex; flex-direction: column; gap: var(--esp-3); }
 .cartao > h2, .cartao > header { margin-bottom: 0; }
 ul.lista { max-height: 300px; overflow-y: auto; }
 /* instruções ficam fechadas: quem já configurou não precisa ler de novo */
-.como { border-top: 1px solid var(--slate-200); padding-top: 10px; margin-top: auto;
-  summary { cursor: pointer; font-size: 13px; font-weight: 500; color: var(--slate-700); }
-  &[open] summary { margin-bottom: 8px; } }
-.bloco-codigo { margin: 4px 0; }
+.como { border-top: 1px solid var(--cor-borda); padding-top: var(--esp-2-5); margin-top: auto;
+  summary { cursor: pointer; font-size: var(--texto-xs); font-weight: 500; color: var(--cor-texto-2); }
+  &[open] summary { margin-bottom: var(--esp-2); } }
+.bloco-codigo { margin: var(--esp-1) 0; }
 /* QR da ponte: fundo branco sempre (o celular precisa de contraste, mesmo no tema escuro) */
-.qr { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap;
-  img { background: #fff; padding: 8px; border-radius: 8px; border: 1px solid var(--slate-200); flex: none; }
-  > div { display: flex; flex-direction: column; gap: 6px; min-width: 200px; flex: 1; }
+.qr { display: flex; gap: var(--esp-4); align-items: flex-start; flex-wrap: wrap;
+  img { background: var(--branco); padding: var(--esp-2); border-radius: var(--raio); border: 1px solid var(--cor-borda); flex: none; }
+  > div { display: flex; flex-direction: column; gap: var(--esp-1-5); min-width: 200px; flex: 1; }
   .passos { margin: 0; } }

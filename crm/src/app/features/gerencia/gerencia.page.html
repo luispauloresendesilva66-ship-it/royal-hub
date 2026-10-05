@@ -11,7 +11,7 @@
 
 <section class="metricas" aria-label="Resumo da agenda">
   <app-metrica rotulo="Visitas marcadas" [valor]="numeros().marcados" [detalhe]="numeros().pelaIA + ' pela assistente'" [destaque]="true" />
-  <app-metrica rotulo="Compareceram" [valor]="numeros().compareceram" detalhe="confirmados por você" cor="var(--ganho)" />
+  <app-metrica rotulo="Compareceram" [valor]="numeros().compareceram" detalhe="confirmados por você" cor="var(--cor-ganho)" />
   <app-metrica rotulo="Faltaram" [valor]="numeros().faltaram" detalhe="para remarcar" />
   <app-metrica rotulo="Sem resposta" [valor]="paradas().length" detalhe="clientes esperando" />
   <app-metrica rotulo="Perguntas para você" [valor]="duvidas().length" detalhe="a assistente não soube" />

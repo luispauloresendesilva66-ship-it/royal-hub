@@ -27,19 +27,19 @@ import { AvisosService } from '../../core/ui/avisos.service';
   styles: `
     .gaveta {
       margin: 0 0 0 auto; height: 100dvh; max-height: 100dvh; width: min(560px, 100vw); max-width: 100vw;
-      padding: 0; border: 0; box-shadow: var(--sombra-forte); background: var(--superficie);
+      padding: 0; border: 0; box-shadow: var(--sombra-3); background: var(--cor-superficie);
       &.larga { width: min(760px, 100vw); }
-      &::backdrop { background: var(--veu); }
+      &::backdrop { background: var(--cor-veu); }
       &[open] { animation: entra .16s ease-out; }
     }
     @keyframes entra { from { transform: translateX(24px); } }
     .gaveta-corpo { display: flex; flex-direction: column; height: 100%; }
-    header { display: flex; align-items: center; justify-content: space-between; gap: 12px;
-      padding: 14px 20px; border-bottom: 1px solid var(--slate-200);
-      h2 { font-size: 16px; } }
-    .gaveta-conteudo { flex: 1; overflow-y: auto; padding: 18px 20px 24px; }
-    :host ::ng-deep [rodape] { display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
-      padding: 12px 20px; border-top: 1px solid var(--slate-200); background: var(--slate-100); }
+    header { display: flex; align-items: center; justify-content: space-between; gap: var(--esp-3);
+      padding: var(--esp-3-5) var(--esp-5); border-bottom: 1px solid var(--cor-borda);
+      h2 { font-size: var(--texto-md); } }
+    .gaveta-conteudo { flex: 1; overflow-y: auto; padding: var(--esp-5) var(--esp-5) var(--esp-6); }
+    :host ::ng-deep [rodape] { display: flex; flex-wrap: wrap; gap: var(--esp-2); align-items: center;
+      padding: var(--esp-3) var(--esp-5); border-top: 1px solid var(--cor-borda); background: var(--cor-superficie-baixa); }
   `,
 })
 export class Gaveta {

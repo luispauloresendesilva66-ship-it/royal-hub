@@ -24,13 +24,13 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
     </table>
   `,
   styles: `
-    .grafico { display: grid; grid-template-columns: repeat(14, minmax(0, 1fr)); gap: 6px; height: 160px; align-items: end; }
-    .coluna { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 4px; height: 100%; min-width: 0; overflow: hidden; }
-    @media (max-width: 520px) { .grafico { gap: 3px; } .dia { font-size: 9px; } }
-    .barra { width: 100%; max-width: 28px; background: var(--azul-500); border-radius: 3px 3px 0 0; min-height: 3px;
-      &.zero { background: var(--slate-200); } }
-    .n { font: 500 11px/1 var(--mono); color: var(--slate-700); min-height: 11px; }
-    .dia { font: 400 10px/1 var(--mono); color: var(--slate-500); white-space: nowrap; }
+    .grafico { display: grid; grid-template-columns: repeat(14, minmax(0, 1fr)); gap: var(--esp-1-5); height: 160px; align-items: end; }
+    .coluna { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: var(--esp-1); height: 100%; min-width: 0; overflow: hidden; }
+    @media (max-width: 520px) { .grafico { gap: 3px; } .dia { font-size: var(--texto-2xs); } }
+    .barra { width: 100%; max-width: 28px; background: var(--cor-link); border-radius: 3px 3px 0 0; min-height: 3px;
+      &.zero { background: var(--cor-superficie-funda); } }
+    .n { font: 500 var(--texto-2xs)/1 var(--mono); color: var(--cor-texto-2); min-height: 11px; }
+    .dia { font: 400 var(--texto-2xs)/1 var(--mono); color: var(--cor-texto-mudo); white-space: nowrap; }
     @media (max-width: 520px) { .coluna:nth-child(odd) .dia { visibility: hidden; } }
   `,
 })

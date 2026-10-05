@@ -69,7 +69,7 @@
             <td class="corta">{{ l.interesse || '—' }}</td>
             <td class="mudo">{{ l.origem }}@if (l.campanha) { <small>{{ l.campanha }}</small> }</td>
             <td><span class="etiqueta" [class]="l.temperatura">{{ rotuloTemperatura(l.temperatura) }}</span></td>
-            <td><span class="etapa"><i [style.background]="corEtapa(l.status)"></i>{{ nomeEtapa(l.status) }}</span></td>
+            <td><span class="etapa"><i class="cor-etapa" [style.--cor-etapa]="corEtapa(l.status)"></i>{{ nomeEtapa(l.status) }}</span></td>
             <td class="num">{{ l.valor_estimado ? (l.valor_estimado | brl) : '—' }}</td>
             <td class="mudo">{{ equipe.nomeDe(l.responsavel_id) || '—' }}</td>
             <td class="mudo mono pequeno">{{ l.data_criacao | quando }}</td>

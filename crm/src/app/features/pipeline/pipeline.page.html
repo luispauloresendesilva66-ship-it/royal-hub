@@ -30,7 +30,7 @@
 
 <div class="quadro" cdkDropListGroup [attr.aria-busy]="carregando()">
   @for (col of colunas(); track col.etapa.slug) {
-    <section class="coluna" [attr.aria-labelledby]="'col-' + col.etapa.slug" [style.--cor]="col.etapa.cor">
+    <section class="coluna cor-etapa" [attr.aria-labelledby]="'col-' + col.etapa.slug" [style.--cor-etapa]="col.etapa.cor">
       <header>
         <div class="titulo">
           <h2 [id]="'col-' + col.etapa.slug">{{ col.etapa.nome }}</h2>

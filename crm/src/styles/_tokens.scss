@@ -1,0 +1,262 @@
+/* ============================================================================
+   Royal Hub — design tokens
+   Três camadas: primitivos (escalas OKLCH) → semânticos (papel na interface,
+   claro/escuro) → componentes (styles.scss e páginas). As páginas só usam os
+   semânticos e as escalas de espaço, raio, sombra e texto.
+   Documentação, contraste e exportação DTCG: docs/redesign/etapa-2/.
+   ============================================================================ */
+
+/* ----------------------------------------------------------------- primitivos
+   Uma família por matiz. Os neutros (ardósia) carregam um pingo do azul da marca
+   (h 257), para nunca brigar com o marinho. Os valores vêm da paleta anterior
+   convertida para OKLCH; só a matiz dos neutros foi alinhada. */
+@mixin primitivos {
+  /* ardósia — neutros frios */
+  --ardosia-50:  oklch(97.6% 0.005 257);
+  --ardosia-100: oklch(96.8% 0.007 257);
+  --ardosia-200: oklch(92.9% 0.013 257);
+  --ardosia-300: oklch(86.9% 0.020 257);
+  --ardosia-400: oklch(71.1% 0.035 257);
+  --ardosia-450: oklch(66.0% 0.030 257);  /* menor tom com 3:1 sobre branco: borda de campo */
+  --ardosia-500: oklch(56.0% 0.030 257);  /* menor tom com 4,5:1 sobre branco */
+  --ardosia-550: oklch(51.4% 0.036 257);
+  --ardosia-600: oklch(44.6% 0.037 257);
+  --ardosia-700: oklch(37.2% 0.039 257);
+  --ardosia-900: oklch(20.8% 0.040 257);
+
+  /* marinho — a cor da marca e das ações */
+  --marinho-100: oklch(94.6% 0.015 254);
+  --marinho-200: oklch(87.8% 0.029 254);
+  --marinho-400: oklch(58.3% 0.101 254);
+  --marinho-500: oklch(46.9% 0.092 254);
+  --marinho-600: oklch(41.2% 0.081 254);
+  --marinho-700: oklch(34.6% 0.074 254);
+  --marinho-800: oklch(26.7% 0.048 254);
+  --marinho-900: oklch(22.1% 0.039 254);
+  --marinho-950: oklch(18.2% 0.031 254);
+
+  /* ouro — acento da marca, só decoração e títulos */
+  --ouro-300: oklch(81.4% 0.110 86);
+  --ouro-500: oklch(72.8% 0.138 86);
+  --ouro-700: oklch(62.0% 0.118 86);
+  --ouro-800: oklch(53.5% 0.103 86);  /* ouro que pode ser texto em fundo claro */
+
+  /* estados */
+  --verde-100: oklch(94.8% 0.019 160);
+  --verde-200: oklch(87.1% 0.035 160);
+  --verde-600: oklch(48.9% 0.092 160);
+  --vermelho-100: oklch(93.8% 0.019 22);
+  --vermelho-200: oklch(84.7% 0.035 22);
+  --vermelho-600: oklch(48.6% 0.129 22);
+  --vermelho-800: oklch(36.2% 0.107 22);
+  --ambar-100: oklch(95.8% 0.032 80);
+  --ambar-200: oklch(89.0% 0.057 80);
+  --ambar-600: oklch(50.8% 0.108 80);
+
+  --branco: oklch(100% 0 0);
+}
+
+/* ---------------------------------------------------------------- semânticos */
+@mixin semanticos-claro {
+  color-scheme: light;
+
+  /* superfícies, do fundo para cima */
+  --cor-fundo: var(--ardosia-50);
+  --cor-superficie: var(--branco);
+  --cor-superficie-hover: oklch(98.8% 0.003 257);
+  --cor-superficie-baixa: var(--ardosia-100);  /* cabeçalho de tabela, colunas do funil, campos só-leitura */
+  --cor-superficie-funda: var(--ardosia-200);
+
+  /* texto — quatro níveis */
+  --cor-titulo: var(--marinho-900);
+  --cor-texto: var(--ardosia-900);
+  --cor-texto-2: var(--ardosia-700);
+  --cor-texto-3: var(--ardosia-600);
+  --cor-texto-mudo: var(--ardosia-550);
+  --cor-texto-desativado: var(--ardosia-400);   /* só para o que não precisa ser lido: ícones apagados, desabilitado */
+  --cor-placeholder: var(--ardosia-500);
+
+  /* bordas */
+  --cor-borda-suave: var(--ardosia-100);
+  --cor-borda: var(--ardosia-200);
+  --cor-borda-forte: var(--ardosia-300);
+  --cor-borda-controle: var(--ardosia-450);     /* contorno de campo: 3:1 (WCAG 1.4.11) */
+  --cor-borda-controle-hover: var(--ardosia-550);
+
+  /* ação, links e destaque */
+  --cor-acao: var(--marinho-700);
+  --cor-acao-hover: var(--marinho-800);
+  --cor-sobre-acao: var(--branco);
+  --cor-link: var(--marinho-500);
+  --cor-destaque: var(--marinho-700);          /* aba ativa, item atual */
+  --cor-foco: var(--marinho-500);
+  --cor-foco-suave: oklch(46.9% 0.092 254 / .25);
+
+  /* informação e estados de negócio */
+  --cor-info: var(--marinho-600);    --cor-info-fundo: var(--marinho-100);    --cor-info-borda: var(--marinho-200);
+  --cor-ganho: var(--verde-600);     --cor-ganho-fundo: var(--verde-100);     --cor-ganho-borda: var(--verde-200);
+  --cor-perda: var(--vermelho-600);  --cor-perda-fundo: var(--vermelho-100);  --cor-perda-borda: var(--vermelho-200);
+  --cor-alerta: var(--ambar-600);    --cor-alerta-fundo: var(--ambar-100);    --cor-alerta-borda: var(--ambar-200);
+  --cor-erro-forte: var(--vermelho-800);
+
+  /* marca */
+  --cor-marca: var(--ouro-500);
+  --cor-marca-clara: var(--ouro-300);
+  --cor-marca-escura: var(--ouro-700);
+  --cor-marca-texto: var(--ouro-800);
+
+  /* blocos sempre escuros ou invertidos */
+  --cor-inverso-fundo: var(--marinho-900);  --cor-inverso-texto: var(--branco);
+  --cor-codigo-fundo: var(--marinho-900);   --cor-codigo-texto: oklch(91.0% 0.019 254);
+  --cor-fundo-marca: var(--marinho-900);   /* painéis da marca: login, página inicial */
+  --cor-lateral-fundo: var(--marinho-900);
+  --cor-lateral-texto: oklch(85.3% 0.023 254);
+  --cor-lateral-mudo: oklch(68.3% 0.036 257);
+  --cor-lateral-grupo: oklch(70.8% 0.036 257);
+  --cor-lateral-forte: var(--branco);
+  --cor-veu: oklch(22.1% 0.039 254 / .42);
+
+  /* sobre superfícies da marca (menu lateral, login, página inicial): iguais nos dois temas */
+  --cor-sobre-marca-hover: oklch(100% 0 0 / .06);
+  --cor-sobre-marca-ativo: oklch(100% 0 0 / .09);
+  --cor-sobre-marca-borda: oklch(100% 0 0 / .1);
+  --cor-sobre-marca-borda-forte: oklch(100% 0 0 / .2);
+  --cor-sobre-marca-contorno: oklch(100% 0 0 / .45);
+  --cor-marca-fio: color-mix(in oklch, var(--ouro-500) 30%, transparent);     /* filete dourado */
+  --cor-marca-brilho: color-mix(in oklch, var(--ouro-500) 16%, transparent);  /* luz difusa de fundo */
+  --cor-acao-brilho: color-mix(in oklch, var(--marinho-400) 16%, transparent);
+  --cor-whatsapp: oklch(51.5% 0.110 157);  /* botão "chamar no WhatsApp" das páginas públicas (5,3:1 com branco) */
+
+  /* sombras: tingidas de marinho, uma só fonte de luz (de cima) */
+  --sombra-1: 0 1px 2px oklch(22% 0.039 254 / .06), 0 1px 1px oklch(22% 0.039 254 / .04);
+  --sombra-2: 0 4px 12px oklch(22% 0.039 254 / .10), 0 1px 3px oklch(22% 0.039 254 / .06);
+  --sombra-3: 0 12px 40px oklch(22% 0.039 254 / .30);
+}
+
+/* O escuro mantém os mesmos papéis; os tons sobem de claridade e perdem um pouco de croma. */
+@mixin semanticos-escuro {
+  color-scheme: dark;
+
+  --cor-fundo: oklch(18.6% 0.018 257);
+  --cor-superficie: oklch(23.4% 0.026 257);
+  --cor-superficie-hover: oklch(25.9% 0.027 257);
+  --cor-superficie-baixa: oklch(27.5% 0.029 257);
+  --cor-superficie-funda: oklch(33.1% 0.035 257);
+
+  --cor-titulo: oklch(97.2% 0.008 254);
+  --cor-texto: oklch(95.6% 0.010 257);
+  --cor-texto-2: oklch(86.0% 0.019 257);
+  --cor-texto-3: oklch(78.2% 0.025 257);
+  --cor-texto-mudo: oklch(71.2% 0.028 257);
+  --cor-texto-desativado: oklch(56.9% 0.035 257);
+  --cor-placeholder: oklch(62.5% 0.030 257);
+
+  --cor-borda-suave: oklch(27.5% 0.029 257);
+  --cor-borda: oklch(33.1% 0.035 257);
+  --cor-borda-forte: oklch(39.4% 0.035 257);
+  --cor-borda-controle: oklch(52.5% 0.030 257);
+  --cor-borda-controle-hover: oklch(62.5% 0.030 257);
+
+  --cor-acao: oklch(53.6% 0.118 254);
+  --cor-acao-hover: oklch(47.5% 0.110 254);   /* no escuro o hover escurece: clarear derrubava o contraste do texto branco */
+  --cor-sobre-acao: var(--branco);
+  --cor-link: oklch(72.3% 0.087 254);
+  --cor-destaque: oklch(81.7% 0.060 254);
+  --cor-foco: oklch(72.3% 0.087 254);
+  --cor-foco-suave: oklch(72.3% 0.087 254 / .35);
+
+  --cor-info: oklch(77.1% 0.073 254);    --cor-info-fundo: oklch(28.8% 0.051 254);  --cor-info-borda: oklch(38.0% 0.067 254);
+  --cor-ganho: oklch(79.1% 0.107 160);   --cor-ganho-fundo: oklch(28.6% 0.035 165); --cor-ganho-borda: oklch(40.1% 0.058 160);
+  --cor-perda: oklch(79.0% 0.092 22);    --cor-perda-fundo: oklch(27.8% 0.041 22);  --cor-perda-borda: oklch(36.3% 0.061 22);
+  --cor-alerta: oklch(83.9% 0.118 80);   --cor-alerta-fundo: oklch(30.0% 0.043 80); --cor-alerta-borda: oklch(41.8% 0.065 80);
+  --cor-erro-forte: oklch(41.0% 0.107 22);
+
+  --cor-marca: var(--ouro-500);
+  --cor-marca-clara: var(--ouro-300);
+  --cor-marca-escura: var(--ouro-700);
+  --cor-marca-texto: var(--ouro-300);
+
+  --cor-inverso-fundo: oklch(94.5% 0.012 254);  --cor-inverso-texto: var(--marinho-900);
+  --cor-codigo-fundo: oklch(15.5% 0.020 257);    --cor-codigo-texto: oklch(91.0% 0.019 254);
+  --cor-fundo-marca: var(--marinho-900);
+  --cor-lateral-fundo: var(--marinho-950);
+  --cor-lateral-texto: oklch(85.3% 0.023 254);
+  --cor-lateral-mudo: oklch(68.3% 0.036 257);
+  --cor-lateral-grupo: oklch(70.8% 0.036 257);
+  --cor-lateral-forte: var(--branco);
+  --cor-veu: oklch(0% 0 0 / .6);
+
+  --sombra-1: 0 1px 2px oklch(0% 0 0 / .5), 0 1px 1px oklch(0% 0 0 / .3);
+  --sombra-2: 0 0 0 1px oklch(100% 0 0 / .06), 0 4px 12px oklch(0% 0 0 / .45);
+  --sombra-3: 0 12px 40px oklch(0% 0 0 / .6);
+}
+
+/* ------------------------------------------------------------- escalas fixas */
+@mixin escalas {
+  /* tipografia: segunda maior (1,125) a partir de 14px, arredondada a 0,5px.
+     Abaixo de 11px nada é lido com conforto; acima de 32px só na página inicial. */
+  --texto-2xs: 11px;
+  --texto-xs: 12.5px;
+  --texto-sm: 14px;     /* base do app */
+  --texto-md: 16px;
+  --texto-lg: 18px;
+  --texto-xl: 20px;
+  --texto-2xl: 22.5px;
+  --texto-3xl: 25px;
+  --texto-4xl: 28px;
+  --texto-5xl: 32px;
+  --altura-texto: 1.5;
+  --altura-titulo: 1.25;
+  --peso-normal: 400;
+  --peso-medio: 500;
+  --peso-forte: 600;
+  --sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --serif: 'Cinzel', Georgia, 'Times New Roman', serif;
+
+  /* espaço: grade de 4px (com meio passo de 2px até 16px) */
+  --esp-0-5: 2px;
+  --esp-1: 4px;
+  --esp-1-5: 6px;
+  --esp-2: 8px;
+  --esp-2-5: 10px;
+  --esp-3: 12px;
+  --esp-3-5: 14px;
+  --esp-4: 16px;
+  --esp-5: 20px;
+  --esp-6: 24px;
+  --esp-7: 28px;
+  --esp-8: 32px;
+  --esp-10: 40px;
+  --esp-12: 48px;
+  --esp-14: 56px;
+  --esp-16: 64px;
+  --esp-20: 80px;
+  --esp-24: 96px;
+
+  /* raio: mais fechado dentro, mais aberto fora */
+  --raio-xs: 4px;    /* etiquetas internas, setas */
+  --raio-sm: 6px;    /* botões, campos */
+  --raio: 8px;       /* cartões */
+  --raio-lg: 12px;   /* gavetas, diálogos, cartões públicos */
+  --raio-xl: 16px;   /* blocos grandes da página inicial */
+  --raio-pilula: 999px;
+
+  /* camadas */
+  --z-base: 1;
+  --z-fixo: 20;
+  --z-gaveta: 40;
+  --z-aviso: 60;
+  --z-topo: 100;
+
+  /* movimento */
+  --dur-rapida: 120ms;
+  --dur: 200ms;
+  --dur-lenta: 300ms;
+  --curva-saida: cubic-bezier(0.23, 1, 0.32, 1);
+  --curva-movimento: cubic-bezier(0.77, 0, 0.175, 1);
+
+  /* foco e alvo de toque */
+  --foco: 0 0 0 2px var(--cor-superficie), 0 0 0 4px var(--cor-foco);
+  --alvo: 36px;
+}

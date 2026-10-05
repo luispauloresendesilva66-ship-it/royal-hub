@@ -1,30 +1,30 @@
 .auth { display: grid; grid-template-columns: minmax(280px, 42%) 1fr; min-height: 100dvh; position: relative; }
 .auth-marca {
   position: relative; overflow: hidden; isolation: isolate;
-  background: var(--navy-900); color: #C5D0DE; padding: 48px; display: flex; flex-direction: column; justify-content: flex-end; gap: 22px;
-  background-image: radial-gradient(120% 80% at 20% 100%, rgba(201, 162, 39, .16), transparent 60%),
-                    linear-gradient(160deg, rgba(74, 127, 181, .16), transparent 55%);
-  border-right: 3px solid var(--ouro-500);
-  p { max-width: 30ch; font-size: 15px; line-height: 1.6; color: #C5D0DE; }
+  background: var(--cor-fundo-marca); color: var(--cor-lateral-texto); padding: var(--esp-12); display: flex; flex-direction: column; justify-content: flex-end; gap: var(--esp-6);
+  background-image: radial-gradient(120% 80% at 20% 100%, var(--cor-marca-brilho), transparent 60%),
+                    linear-gradient(160deg, var(--cor-acao-brilho), transparent 55%);
+  border-right: 3px solid var(--cor-marca);
+  p { max-width: 30ch; font-size: var(--texto-md); line-height: 1.6; color: var(--cor-lateral-texto); }
   app-marca, p { position: relative; z-index: 2; }
   /* a foto fica atrás; o degradê escurece a base para a marca e a frase continuarem legíveis */
   .auth-foto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 62% top; z-index: 0; }
   &::after { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-    background: linear-gradient(to top, rgba(15, 27, 45, .96) 0%, rgba(15, 27, 45, .72) 26%, rgba(15, 27, 45, .12) 60%, rgba(15, 27, 45, .28) 100%); }
+    background: linear-gradient(to top, color-mix(in oklch, var(--marinho-900) 96%, transparent) 0%, color-mix(in oklch, var(--marinho-900) 72%, transparent) 26%, color-mix(in oklch, var(--marinho-900) 12%, transparent) 60%, color-mix(in oklch, var(--marinho-900) 28%, transparent) 100%); }
 }
 .auth-caixa {
-  align-self: center; justify-self: center; width: min(380px, calc(100vw - 32px)); padding: 32px 0;
-  display: flex; flex-direction: column; gap: 14px;
-  h1 { font-family: var(--serif); font-weight: 600; font-size: 26px; letter-spacing: .01em; color: var(--navy-900); }
-  .btn.primario { width: 100%; min-height: 44px; font-size: 14px; letter-spacing: .02em; }
+  align-self: center; justify-self: center; width: min(380px, calc(100vw - 32px)); padding: var(--esp-8) 0;
+  display: flex; flex-direction: column; gap: var(--esp-3-5);
+  h1 { font-family: var(--serif); font-weight: 600; font-size: var(--texto-3xl); letter-spacing: .01em; color: var(--cor-titulo); }
+  .btn.primario { width: 100%; min-height: 44px; font-size: var(--texto-sm); letter-spacing: .02em; }
 }
-.senha { display: flex; gap: 6px; }
+.senha { display: flex; gap: var(--esp-1-5); }
 .auth-tema { position: absolute; top: 12px; right: 12px; }
-.link { all: unset; cursor: pointer; color: var(--azul-500); text-decoration: underline; width: fit-content; font-size: 13px;
+.link { all: unset; cursor: pointer; color: var(--cor-link); text-decoration: underline; width: fit-content; font-size: var(--texto-xs);
   &:focus-visible { box-shadow: var(--foco); border-radius: 2px; } }
 
 @media (max-width: 760px) {
   .auth { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
-  .auth-marca { padding: 20px 16px; border-right: 0; border-bottom: 3px solid var(--ouro-500);
+  .auth-marca { padding: var(--esp-5) var(--esp-4); border-right: 0; border-bottom: 3px solid var(--cor-marca);
     app-marca { --escala: .7; } p, .auth-foto, &::after { display: none; } }
 }
