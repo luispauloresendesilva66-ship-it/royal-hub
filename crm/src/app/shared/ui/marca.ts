@@ -60,7 +60,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
       font-family: var(--serif); font-size: calc(var(--altura, 34px) * .5);
       font-weight: 600; letter-spacing: .07em; text-transform: uppercase; white-space: nowrap;
       b { font-weight: 600; color: var(--cor-titulo); }
-      i { font-style: normal; font-weight: 600; color: var(--ouro-700); }
+      i { font-style: normal; font-weight: 600; color: var(--cor-marca-texto); }
     }
     .escuro .palavra {
       b { color: var(--branco); }

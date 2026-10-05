@@ -2,150 +2,76 @@
 
 <header class="topo">
   <div class="largura">
-    <a class="marca" routerLink="/" aria-label="Royal Hub — página inicial"><app-marca [escuro]="true" [altura]="34" /></a>
-    <nav aria-label="Seções da página">
-      <a href="#recursos">Recursos</a>
-      <a href="#como-funciona">Como funciona</a>
-      <a href="#whatsapp">WhatsApp</a>
-      <a href="#perguntas">Perguntas</a>
+    <a class="marca" routerLink="/" aria-label="Royal Hub, página inicial"><app-marca [altura]="28" /></a>
+    <nav aria-label="Principal">
+      <a class="secundario" href="#como-funciona">Como funciona</a>
+      <a class="secundario" href="#beneficios">Benefícios</a>
+      <a routerLink="/entrar">Entrar</a>
     </nav>
-    <a class="btn entrar" routerLink="/entrar">Entrar</a>
   </div>
 </header>
 
-<main id="conteudo">
-  <!-- ------------------------------------------------------------ abertura -->
-  <section class="heroi" aria-labelledby="titulo-heroi">
-    <img class="heroi-foto" src="/login-lado.webp" srcset="/login-lado-p.webp 480w, /login-lado.webp 900w"
-         sizes="(max-width: 900px) 100vw, 46vw" alt="" fetchpriority="high" decoding="async" />
-    <div class="largura heroi-texto">
-      <p class="sobretitulo">CRM para imobiliárias</p>
-      <h1 id="titulo-heroi">A imobiliária inteira, <em>em um só lugar.</em></h1>
-      <p class="apoio">Leads, funil, carteira de imóveis, WhatsApp com assistente e o site da sua marca.
-        Tudo que a equipe precisa para atender com elegância e fechar mais, sem servidor para manter.</p>
-      <div class="acoes">
-        <a class="btn ouro" routerLink="/entrar">Entrar no painel</a>
-        <a class="btn claro" href="#recursos">Conhecer os recursos</a>
+<main id="conteudo" tabindex="-1">
+  <section class="heroi" aria-labelledby="t-heroi">
+    <div class="largura">
+      <h1 id="t-heroi">O bot de WhatsApp que <em>atende por você.</em></h1>
+      <div class="linha-sub">
+        <p class="apoio">CRM para imobiliárias: a assistente responde, qualifica e marca a visita. O funil organiza o resto.</p>
+        <a class="acao" [href]="contato" target="_blank" rel="noopener">Quero conhecer <span aria-hidden="true">→</span><span class="sr-only"> (abre o WhatsApp)</span></a>
       </div>
-      <ul class="provas" aria-label="Destaques">
-        <li><b>Assistente 24 h</b><span>responde e marca visitas no WhatsApp</span></li>
-        <li><b>Liga em minutos</b><span>escaneie um QR code e pronto</span></li>
-        <li><b>Zero instalação</b><span>no navegador, no computador ou no celular</span></li>
-      </ul>
+      <figure class="vitrine">
+        <img src="/home/conversa-828.webp" srcset="/home/conversa-828.webp 828w, /home/conversa-1656.webp 1656w"
+             sizes="(max-width: 1240px) calc(100vw - 40px), 1200px" width="828" height="700" fetchpriority="high" decoding="async"
+             alt="A assistente do Royal Hub respondendo uma cliente que viu o anúncio de uma casa no Karaíba." />
+      </figure>
     </div>
   </section>
 
-  <!-- ------------------------------------------------------------ recursos -->
-  <section id="recursos" class="bloco" aria-labelledby="titulo-recursos">
+  <section id="como-funciona" class="secao" aria-labelledby="t-como">
     <div class="largura">
-      <p class="sobretitulo">O que o Royal Hub faz por você</p>
-      <h2 id="titulo-recursos">Cada parte do atendimento, cuidada com o mesmo esmero.</h2>
-      <p class="apoio">Do primeiro contato à chave na mão, sem trocar de ferramenta.</p>
-      <ul class="grade recursos">
-        @for (r of recursos; track r.titulo) {
-          <li class="cartao-recurso">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path [attr.d]="r.d" /></svg>
-            <h3>{{ r.titulo }}</h3>
-            <p>{{ r.texto }}</p>
-          </li>
-        }
-      </ul>
-    </div>
-  </section>
-
-  <!-- ------------------------------------------------------------ como funciona -->
-  <section id="como-funciona" class="bloco escuro" aria-labelledby="titulo-passos">
-    <div class="largura">
-      <p class="sobretitulo">Como funciona</p>
-      <h2 id="titulo-passos">Três passos e a sua equipe já está atendendo.</h2>
-      <ol class="passos-grade">
-        @for (p of passos; track p.titulo; let i = $index) {
+      <h2 id="t-como">Do QR code à visita marcada.</h2>
+      <ol class="passos">
+        @for (p of passos; track p.titulo) {
           <li>
-            <span class="numero" aria-hidden="true">{{ i + 1 }}</span>
             <h3>{{ p.titulo }}</h3>
             <p>{{ p.texto }}</p>
+            @if (p.imagem) {
+              <figure>
+                <img src="/home/funil-1224.webp" srcset="/home/funil-1224.webp 1224w, /home/funil-2448.webp 2448w"
+                     sizes="(max-width: 860px) calc(100vw - 40px), 640px" width="1224" height="840" loading="lazy" decoding="async"
+                     alt="Funil de vendas com as colunas Novo, Em contato, Visita, Proposta e Fechado." />
+              </figure>
+            }
           </li>
         }
       </ol>
     </div>
   </section>
 
-  <!-- ------------------------------------------------------------ whatsapp -->
-  <section id="whatsapp" class="bloco" aria-labelledby="titulo-whats">
-    <div class="largura duas-colunas">
-      <div>
-        <p class="sobretitulo">WhatsApp com assistente</p>
-        <h2 id="titulo-whats">Ela atende na hora. Você entra na hora certa.</h2>
-        <p class="apoio">A assistente responde com a personalidade da sua imobiliária, entende o que o cliente procura,
-          sugere imóveis da carteira e marca a visita. Tudo fica anotado na ficha do lead, e a equipe acompanha pelo painel.</p>
-        <ul class="lista-marcada">
-          <li>Responde de madrugada, no domingo, no feriado.</li>
-          <li>Qualifica o interesse: tipo, região, valor, forma de pagamento.</li>
-          <li>Deixa na Agenda o que não soube responder, para a equipe retomar.</li>
-          <li>Você liga e desliga por conversa, quando quiser assumir.</li>
-        </ul>
-      </div>
-      <figure class="conversa" aria-label="Exemplo de conversa atendida pela assistente">
-        <div class="balao cliente"><span class="quem">Cliente</span>Boa tarde! Procuro um apartamento de 3 quartos até 600 mil, perto do Santa Mônica.</div>
-        <div class="balao assistente"><span class="quem">Assistente</span>Boa tarde, Ana! Tenho duas opções que encaixam nisso, uma com varanda gourmet. Te mando as fotos? Se quiser, já deixo uma visita marcada no sábado de manhã.</div>
-        <div class="balao cliente"><span class="quem">Cliente</span>Pode mandar. Sábado às 10h fica ótimo.</div>
-        <figcaption class="anotado"><span class="etiqueta quente">Lead quente</span> Visita marcada para sábado, 10h · anotado na ficha</figcaption>
-      </figure>
-    </div>
-  </section>
-
-  <!-- ------------------------------------------------------------ diferenciais -->
-  <section class="bloco suave" aria-labelledby="titulo-dif">
+  <section id="beneficios" class="secao" aria-labelledby="t-ben">
     <div class="largura">
-      <p class="sobretitulo">Por que o Royal Hub</p>
-      <h2 id="titulo-dif">Feito para ser usado todos os dias, por toda a equipe.</h2>
-      <ul class="grade diferenciais">
-        @for (d of diferenciais; track d.titulo) {
-          <li><h3>{{ d.titulo }}</h3><p>{{ d.texto }}</p></li>
+      <h2 id="t-ben">Ninguém fica sem resposta.</h2>
+      <ul class="beneficios">
+        @for (b of beneficios; track b.titulo) {
+          <li><h3>{{ b.titulo }}</h3><p>{{ b.texto }}</p></li>
         }
       </ul>
     </div>
   </section>
 
-  <!-- ------------------------------------------------------------ perguntas -->
-  <section id="perguntas" class="bloco" aria-labelledby="titulo-faq">
-    <div class="largura estreita">
-      <p class="sobretitulo">Perguntas frequentes</p>
-      <h2 id="titulo-faq">O que costumam perguntar antes de começar.</h2>
-      <div class="faq">
-        @for (q of perguntas; track q.p) {
-          <details>
-            <summary>{{ q.p }}</summary>
-            <p>{{ q.r }}</p>
-          </details>
-        }
-      </div>
-    </div>
-  </section>
-
-  <!-- ------------------------------------------------------------ chamada final -->
-  <section class="bloco escuro final" aria-labelledby="titulo-final">
-    <div class="largura estreita">
-      <p class="sobretitulo">Comece hoje</p>
-      <h2 id="titulo-final">Atendimento à altura dos imóveis que você vende.</h2>
-      <p class="apoio">Entre no painel ou fale com a gente para uma apresentação sem compromisso.</p>
-      <div class="acoes">
-        <a class="btn ouro" routerLink="/entrar">Entrar no painel</a>
-        @if (contato) { <a class="btn claro" [href]="contato" target="_blank" rel="noopener">Falar com a gente</a> }
-      </div>
+  <section id="contato" class="chamada" aria-labelledby="t-cta">
+    <div class="largura">
+      <h2 id="t-cta">Veja a assistente atendendo um cliente seu.</h2>
+      <p>Uma conversa rápida no WhatsApp e a gente mostra o Royal Hub com os imóveis da sua imobiliária.</p>
+      <a class="acao" [href]="contato" target="_blank" rel="noopener">Quero conhecer <span aria-hidden="true">→</span><span class="sr-only"> (abre o WhatsApp)</span></a>
     </div>
   </section>
 </main>
 
 <footer class="rodape">
   <div class="largura">
-    <app-marca [escuro]="true" [altura]="26" />
-    <nav aria-label="Links do rodapé">
-      <a href="#recursos">Recursos</a>
-      <a href="#como-funciona">Como funciona</a>
-      <a href="#perguntas">Perguntas</a>
-      <a routerLink="/entrar">Entrar</a>
-    </nav>
+    <app-marca [altura]="22" />
+    <a routerLink="/entrar">Entrar no painel</a>
     <p>© {{ ano }} Royal Hub. CRM para imobiliárias.</p>
   </div>
 </footer>
