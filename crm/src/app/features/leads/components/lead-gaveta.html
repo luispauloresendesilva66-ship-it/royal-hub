@@ -42,7 +42,7 @@
     <div class="grade-campos">
       <div class="campo">
         <label for="l-valor">Valor estimado (R$)</label>
-        <input id="l-valor" name="valor" class="mono" appMascara="moeda" [(ngModel)]="f.valor_estimado" placeholder="850.000" />
+        <input id="l-valor" name="valor" class="mono" appMascara="moeda" [(ngModel)]="f.valor_estimado" placeholder="Ex.: 450.000" />
       </div>
       <div class="campo">
         <label for="l-resp">Responsável</label>
@@ -88,7 +88,7 @@
         </div>
         <div class="campo">
           <label for="l-imv">Imóveis apresentados</label>
-          <input id="l-imv" name="imoveis" class="mono" [(ngModel)]="f.imoveis" placeholder="8685, 8574" aria-describedby="l-imv-ajuda" />
+          <input id="l-imv" name="imoveis" class="mono" [(ngModel)]="f.imoveis" placeholder="Ex.: 8685, 8574" aria-describedby="l-imv-ajuda" />
           <span class="ajuda" id="l-imv-ajuda">Os códigos, separados por vírgula.</span>
         </div>
       </div>

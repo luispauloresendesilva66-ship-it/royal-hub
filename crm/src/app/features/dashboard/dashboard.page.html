@@ -94,5 +94,8 @@
     </section>
   </div>
 } @else if (!erro()) {
-  <p class="mudo" role="status">Carregando os números…</p>
+  <div class="esqueleto-painel" role="status" aria-label="Carregando os números">
+    @for (i of [1, 2, 3, 4, 5, 6]; track i) { <span class="esqueleto"></span> }
+    <span class="esqueleto grande"></span>
+  </div>
 }

@@ -51,7 +51,6 @@
           <th scope="col" [attr.aria-sort]="ariaSort('nome')"><button type="button" class="ordenar" (click)="ordenar('nome')" title="Ordenar por nome">Lead {{ ariaSort('nome') === 'ascending' ? '↑' : ariaSort('nome') === 'descending' ? '↓' : '' }}</button></th>
           <th scope="col">Contato</th>
           <th scope="col">Procura</th>
-          <th scope="col">Origem</th>
           <th scope="col" [attr.aria-sort]="ariaSort('temperatura')"><button type="button" class="ordenar" (click)="ordenar('temperatura')" title="Ordenar por temperatura" aria-label="Temperatura, ordenar">Temp. {{ ariaSort('temperatura') === 'ascending' ? '↑' : ariaSort('temperatura') === 'descending' ? '↓' : '' }}</button></th>
           <th scope="col" [attr.aria-sort]="ariaSort('status')"><button type="button" class="ordenar" (click)="ordenar('status')" title="Ordenar por etapa">Etapa {{ ariaSort('status') === 'ascending' ? '↑' : ariaSort('status') === 'descending' ? '↓' : '' }}</button></th>
           <th scope="col" class="num" [attr.aria-sort]="ariaSort('valor_estimado')"><button type="button" class="ordenar" (click)="ordenar('valor_estimado')" title="Ordenar por valor">Valor {{ ariaSort('valor_estimado') === 'ascending' ? '↑' : ariaSort('valor_estimado') === 'descending' ? '↓' : '' }}</button></th>
@@ -63,15 +62,14 @@
         @for (l of itens(); track l.id) {
           <tr class="clicavel" (click)="clicouLinha($event, l)">
             <td><button type="button" class="nome-lead" (click)="abrirLead(l)">{{ l.nome }}</button>
-              @if (l.empresa) { <small class="mudo">{{ l.empresa }}</small> }</td>
+              <small class="mudo">{{ l.empresa ? l.empresa + ' · ' : '' }}{{ l.origem }}{{ l.campanha ? ' · ' + l.campanha : '' }}</small></td>
             <td class="mono pequeno contato">{{ l.telefone | telefone }}
               @if (whats(l); as w) { <a class="whats" [href]="w" target="_blank" rel="noopener" [attr.aria-label]="'Chamar ' + l.nome + ' no WhatsApp (nova aba)'" title="Abrir no WhatsApp">WhatsApp</a> }</td>
             <td class="corta">{{ l.interesse || '—' }}</td>
-            <td class="mudo">{{ l.origem }}@if (l.campanha) { <small>{{ l.campanha }}</small> }</td>
             <td><span class="etiqueta" [class]="l.temperatura">{{ rotuloTemperatura(l.temperatura) }}</span></td>
             <td><span class="etapa"><i class="cor-etapa" [style.--cor-etapa]="corEtapa(l.status)"></i>{{ nomeEtapa(l.status) }}</span></td>
             <td class="num">{{ l.valor_estimado ? (l.valor_estimado | brl) : '—' }}</td>
-            <td class="mudo">{{ equipe.nomeDe(l.responsavel_id) || '—' }}</td>
+            <td class="mudo responsavel">{{ equipe.nomeDe(l.responsavel_id) || '—' }}</td>
             <td class="mudo mono pequeno">{{ l.data_criacao | quando }}</td>
           </tr>
         }
@@ -96,7 +94,7 @@
     </div>
   </nav>
 } @else if (carregando()) {
-  <p class="vazio" role="status">Buscando leads…</p>
+  <div class="esqueleto-tabela" role="status" aria-label="Buscando leads">@for (i of [1, 2, 3, 4, 5, 6, 7, 8]; track i) { <span class="esqueleto"></span> }</div>
 } @else {
   <div class="vazio">
     @if (temFiltro()) {

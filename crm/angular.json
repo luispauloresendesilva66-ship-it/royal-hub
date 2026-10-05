@@ -47,6 +47,7 @@
             "allowedCommonJsDependencies": ["qrcode", "dijkstrajs"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
+            "loader": { ".svg": "text" },
             "assets": [
               {
                 "glob": "**/*",

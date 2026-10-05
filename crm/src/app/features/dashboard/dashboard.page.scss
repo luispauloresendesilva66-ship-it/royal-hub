@@ -1,5 +1,13 @@
-.metricas { display: grid; gap: var(--esp-3); grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin-bottom: var(--esp-4); }
+.metricas { display: grid; gap: var(--esp-3); grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin-bottom: var(--esp-4);
+  /* o primeiro número (leads no mês) ocupa duas colunas: é o foco da tela */
+  > app-metrica:first-child { grid-column: span 2; } }
 @media (max-width: 400px) { .metricas { gap: var(--esp-2); } }
+
+/* carregando: o esqueleto tem o formato do painel, a tela não pula quando os números chegam */
+.esqueleto-painel { display: grid; gap: var(--esp-3); grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  .esqueleto { height: 104px; border-radius: var(--raio); }
+  .esqueleto:first-child { grid-column: span 2; }
+  .grande { grid-column: 1 / -1; height: 260px; } }
 .grade { display: grid; gap: var(--esp-4); grid-template-columns: repeat(2, minmax(0, 1fr));
   .cartao + .cartao { margin-top: 0; } }
 @media (max-width: 1000px) { .grade { grid-template-columns: minmax(0, 1fr); } }

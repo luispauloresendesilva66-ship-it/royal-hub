@@ -13,6 +13,7 @@ import { erroAmigavel } from '../../core/supabase/supabase.client';
 import { BrlPipe } from '../../shared/pipes/brl.pipe';
 import { semAcento } from '../../shared/util/planilha';
 import { LeadGaveta } from '../leads/components/lead-gaveta';
+import { Icone } from '../../shared/ui/icone';
 
 interface Coluna { etapa: EtapaPipeline; cards: Lead[]; total: number; ponderado: number }
 
@@ -20,7 +21,7 @@ const MAX_CARDS = 60;
 
 @Component({
   selector: 'app-pipeline',
-  imports: [FormsModule, CdkDropListGroup, CdkDropList, CdkDrag, CdkDragPlaceholder, BrlPipe, LeadGaveta],
+  imports: [FormsModule, CdkDropListGroup, CdkDropList, CdkDrag, CdkDragPlaceholder, BrlPipe, LeadGaveta, Icone],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './pipeline.page.html',
   styleUrl: './pipeline.page.scss',

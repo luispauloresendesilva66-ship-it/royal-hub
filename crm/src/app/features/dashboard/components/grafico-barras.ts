@@ -13,7 +13,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
         <div class="coluna" [title]="b.rotulo + ': ' + b.n + ' lead(s)'">
           <span class="n">{{ b.n || '' }}</span>
           <span class="barra" [style.height.%]="b.altura" [class.zero]="!b.n"></span>
-          <span class="dia">{{ b.curto }}</span>
+          <span class="dia">{{ b.d }}<span class="mes">/{{ b.m }}</span></span>
         </div>
       }
     </div>
@@ -31,7 +31,8 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
       &.zero { background: var(--cor-superficie-funda); } }
     .n { font: 500 var(--texto-2xs)/1 var(--mono); color: var(--cor-texto-2); min-height: 11px; }
     .dia { font: 400 var(--texto-2xs)/1 var(--mono); color: var(--cor-texto-mudo); white-space: nowrap; }
-    @media (max-width: 520px) { .coluna:nth-child(odd) .dia { visibility: hidden; } }
+    /* no celular só o dia cabe embaixo de cada barra ("3/0" cortado parecia data errada: A4 da auditoria) */
+    @media (max-width: 520px) { .mes { display: none; } }
   `,
 })
 export class GraficoBarras {
@@ -43,7 +44,7 @@ export class GraficoBarras {
     const max = Math.max(1, ...s.map((x) => x.n));
     return s.map((x) => {
       const [, m, d] = x.dia.split('-');
-      return { ...x, altura: (x.n / max) * 82, curto: `${d}/${m}`, rotulo: `${d}/${m}` };
+      return { ...x, altura: (x.n / max) * 82, d, m, rotulo: `${d}/${m}` };
     });
   });
 }

@@ -19,16 +19,25 @@
   > .vazio { margin: auto; border: 0; } }
 .conversa-topo { display: flex; flex-wrap: wrap; align-items: center; gap: var(--esp-2-5); padding: var(--esp-3) var(--esp-3-5); border-bottom: 1px solid var(--cor-borda);
   .quem { flex: 1; min-width: 160px; h2 { font-size: var(--texto-md); } } }
+/* a barra de estado diz, de longe, quem está respondendo agora (A6 da auditoria) */
 .estado { display: flex; flex-wrap: wrap; align-items: center; gap: var(--esp-2); padding: var(--esp-2) var(--esp-3-5); border-bottom: 1px solid var(--cor-borda-suave); background: var(--cor-superficie-hover);
+  &.ativa { background: var(--cor-ganho-fundo); border-bottom-color: var(--cor-ganho-borda); }
+  &.pausada { background: var(--cor-alerta-fundo); border-bottom-color: var(--cor-alerta-borda); }
+  .etiqueta { gap: var(--esp-1-5); font-weight: var(--peso-forte); }
   .resp { margin-left: auto; display: inline-flex; align-items: center; gap: var(--esp-1-5); select { width: auto; min-height: 30px; padding: 2px var(--esp-7) 2px var(--esp-2); font-size: var(--texto-xs); } } }
 
 .mensagens { list-style: none; margin: 0; padding: var(--esp-3-5); overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: var(--esp-2); background: var(--cor-fundo);
   &:focus-visible { box-shadow: inset 0 0 0 2px var(--cor-foco); } }
 .msg { max-width: min(78%, 560px); padding: var(--esp-2) var(--esp-3); border-radius: var(--raio); background: var(--cor-superficie); border: 1px solid var(--cor-borda); align-self: flex-start;
   p { white-space: pre-wrap; font-size: var(--texto-sm); }
-  .autor { display: block; font: 500 var(--texto-2xs)/1.3 var(--mono); color: var(--cor-texto-mudo); margin-bottom: 2px; text-transform: uppercase; letter-spacing: .04em; }
-  &.bot, &.voce { align-self: flex-end; background: var(--cor-info-fundo); border-color: var(--cor-info-borda); }
-  &.voce { background: var(--cor-ganho-fundo); border-color: var(--cor-ganho-borda); } }
+  .autor { display: flex; align-items: center; gap: var(--esp-1); font-size: var(--texto-2xs); color: var(--cor-texto-mudo); margin-bottom: 2px;
+    b { font-weight: var(--peso-forte); color: var(--cor-texto-2); } }
+  /* cliente à esquerda; do nosso lado, a assistente (azul, com o robô) e a pessoa da equipe (marinho cheio) */
+  &.bot, &.voce { align-self: flex-end; border-bottom-right-radius: var(--raio-xs); }
+  &.cliente { border-bottom-left-radius: var(--raio-xs); }
+  &.bot { background: var(--cor-info-fundo); border-color: var(--cor-info-borda); .autor { color: var(--cor-info); b { color: var(--cor-info); } } }
+  &.voce { background: var(--cor-acao); border-color: var(--cor-acao); color: var(--cor-sobre-acao);
+    .autor, .autor b { color: color-mix(in oklch, var(--cor-sobre-acao) 80%, transparent); } } }
 
 .enviar { display: flex; gap: var(--esp-2); padding: var(--esp-2-5); border-top: 1px solid var(--cor-borda);
   textarea { min-height: 44px; } .btn { align-self: flex-end; } }

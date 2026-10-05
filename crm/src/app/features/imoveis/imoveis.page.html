@@ -58,13 +58,13 @@
           @if (m.fotos[0]) { <img [src]="m.fotos[0]" [alt]="m.tipo + ' no ' + m.bairro" loading="lazy" /> }
           @else { <span class="sem-foto">sem foto</span> }
           <span class="codigo mono">{{ m.codigo }}</span>
-          <label class="marcar">
+          <label class="marcar" title="Incluir na folha de imóveis">
             <input type="checkbox" [checked]="selecionados().has(m.id)" (change)="marcar(m.id, $any($event.target).checked)" />
             <span class="sr-only">Incluir o imóvel {{ m.codigo }} na folha</span>
           </label>
         </div>
         <div class="corpo">
-          <p class="preco mono">{{ m.preco ? (m.preco | brl) : 'Sob consulta' }}@if (m.finalidade === 'aluguel') {<small>/mês</small>}</p>
+          <p class="preco">{{ m.preco ? (m.preco | brl) : 'Sob consulta' }}@if (m.finalidade === 'aluguel') {<small>/mês</small>}</p>
           <h2>{{ m.tipo }} · {{ m.bairro || 'sem bairro' }}</h2>
           <p class="specs mudo">
             @if (m.quartos) { <span>{{ m.quartos }} qto</span> }
@@ -79,10 +79,13 @@
           </p>
         </div>
         <div class="acoes-card">
-          <button type="button" class="btn pequeno" (click)="editar(m)">Editar <span class="sr-only">{{ m.codigo }}</span></button>
+          <button type="button" class="btn pequeno" (click)="editar(m)"><app-icone nome="editar" [tamanho]="14" />Editar <span class="sr-only">{{ m.codigo }}</span></button>
           @if (m.status === 'disponivel') {
-            <a class="btn pequeno fantasma" [href]="linkPublico(m)" target="_blank" rel="noopener" title="Abre a página pública em nova aba">Ver página <span class="sr-only">do {{ m.codigo }} (abre em nova aba)</span></a>
-            <button type="button" class="btn pequeno fantasma" (click)="copiar(m)">Copiar link</button>
+            <span class="empurra"></span>
+            <a class="btn pequeno fantasma icone" [href]="linkPublico(m)" target="_blank" rel="noopener" title="Ver a página pública"
+               [attr.aria-label]="'Ver a página pública do ' + m.codigo + ' (abre em nova aba)'"><app-icone nome="abrir-fora" /></a>
+            <button type="button" class="btn pequeno fantasma icone" (click)="copiar(m)" title="Copiar o link da página"
+                    [attr.aria-label]="'Copiar o link da página do ' + m.codigo"><app-icone nome="link" /></button>
           }
         </div>
       </li>
@@ -94,7 +97,7 @@
     </div>
   }
 } @else if (carregando()) {
-  <p class="vazio" role="status">Carregando a carteira…</p>
+  <div class="grade-imoveis" role="status" aria-label="Carregando a carteira">@for (i of [1, 2, 3, 4, 5, 6, 7, 8]; track i) { <span class="esqueleto cartao-esqueleto"></span> }</div>
 } @else if (erro()) {
   <div class="vazio">{{ erro() }} <button type="button" class="btn pequeno" (click)="carregar()">Tentar de novo</button></div>
 } @else {

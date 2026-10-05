@@ -1,6 +1,9 @@
 .esmaecida { opacity: .6; transition: opacity .15s; }
 /* em tela estreita a tabela rola para o lado, em vez de espremer as colunas */
-.tabela { min-width: 1040px; }
+.tabela { min-width: 920px; }
+/* origem e campanha viraram a linha de baixo do nome: 8 colunas cabem em 1440 (C2 da auditoria) */
+td.responsavel { white-space: nowrap; max-width: 150px; overflow: hidden; text-overflow: ellipsis; }
+td:first-child small { max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 td.mono, td.num, td:has(.etiqueta), td:has(.etapa) { white-space: nowrap; }
 th:first-child, td:first-child { min-width: 190px; }
 .nome-lead { all: unset; cursor: pointer; font-weight: 600; color: var(--cor-destaque);
@@ -17,3 +20,7 @@ td.corta { max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-sp
 
 .paginacao { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--esp-2-5); margin-top: var(--esp-3);
   .por-pagina { flex-direction: row; align-items: center; gap: var(--esp-2); select { width: auto; } } }
+
+/* carregando: linhas cinza no lugar da tabela */
+.esqueleto-tabela { display: flex; flex-direction: column; gap: var(--esp-2); padding: var(--esp-3); border: 1px solid var(--cor-borda); border-radius: var(--raio); background: var(--cor-superficie);
+  .esqueleto { height: 36px; } .esqueleto:first-child { height: 28px; opacity: .6; } }

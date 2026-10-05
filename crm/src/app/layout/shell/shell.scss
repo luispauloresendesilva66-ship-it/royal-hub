@@ -17,14 +17,30 @@ ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: col
   display: flex; align-items: center; gap: var(--esp-2);
   &::after { content: ''; flex: 1; height: 1px; background: var(--cor-marca-fio); } }
 a:not(.marca) {
-  display: flex; align-items: center; justify-content: space-between; gap: var(--esp-2);
+  display: flex; align-items: center; gap: var(--esp-2-5);
   min-height: 36px; padding: 0 var(--esp-2-5); border-radius: var(--raio-sm); color: inherit; text-decoration: none;
   font-size: var(--texto-sm); font-weight: 500; letter-spacing: .01em;
   &:hover { background: var(--cor-sobre-marca-hover); color: var(--cor-lateral-forte); }
   &.ativo { background: var(--cor-sobre-marca-ativo); color: var(--cor-lateral-forte); box-shadow: inset 3px 0 0 var(--cor-marca); }
   &:focus-visible { box-shadow: 0 0 0 2px var(--cor-marca-clara); }
+  app-icone { opacity: .75; }
+  &.ativo app-icone, &:hover app-icone { opacity: 1; color: var(--cor-marca-clara); }
 }
-.contador { min-width: 20px; padding: 1px var(--esp-1-5); border-radius: var(--raio-pilula); background: var(--cor-acao); color: var(--cor-sobre-acao);
+.dica-atalhos { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: var(--esp-1-5); margin-top: var(--esp-3);
+  color: var(--cor-lateral-mudo); font-size: var(--texto-xs);
+  kbd { background: transparent; color: inherit; border-color: var(--cor-sobre-marca-borda-forte); }
+  &:hover { color: var(--cor-lateral-forte); }
+  &:focus-visible { box-shadow: 0 0 0 2px var(--cor-marca-clara); border-radius: var(--raio-xs); } }
+
+.atalhos { border: 0; border-radius: var(--raio-lg); padding: var(--esp-6); width: min(420px, calc(100% - 32px)); background: var(--cor-superficie); color: var(--cor-texto);
+  box-shadow: var(--sombra-3);
+  &::backdrop { background: var(--cor-veu); }
+  h2 { font-size: var(--texto-lg); margin-bottom: var(--esp-4); }
+  dl { display: grid; grid-template-columns: auto 1fr; gap: var(--esp-2) var(--esp-4); margin: 0 0 var(--esp-5); align-items: center; }
+  dt { white-space: nowrap; } dd { margin: 0; color: var(--cor-texto-2); }
+  form { display: flex; justify-content: flex-end; } }
+@media (max-width: 860px) { .dica-atalhos { display: none; } }
+.contador { margin-left: auto; min-width: 20px; padding: 1px var(--esp-1-5); border-radius: var(--raio-pilula); background: var(--cor-acao); color: var(--cor-sobre-acao);
   font: 500 var(--texto-2xs)/18px var(--mono); text-align: center; }
 
 .eu { margin-top: auto; padding: var(--esp-3) var(--esp-2-5) 0; border-top: 1px solid var(--cor-sobre-marca-borda);
