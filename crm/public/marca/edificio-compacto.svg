@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Royal Hub, símbolo compacto do logo "edifício": torre central com agulha, duas alas de telhado inclinado
+       e a linha do chão. Redução do logo original para 16 a 512px. Fundo marinho, ouro chapado. -->
+  <defs>
+    <linearGradient id="o" x1="0" y1="0" x2="0.15" y2="1">
+      <stop offset="0" stop-color="#E7C77A"/><stop offset="1" stop-color="#C9A227"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#0F1B2D"/>
+  <g fill="url(#o)" fill-rule="evenodd">
+    <path d="M30.7 6.5 L32 5.5 L33.3 6.5 V12.5 H30.7 Z"/>
+    <path d="M27 46 V22.5 L32 14.5 L37 17.5 V21 H39 V26 H37 V46 Z M31.2 25.5 V46 H32.8 V25.5 Z"/>
+    <path d="M14.5 46 V34.5 L24 28.5 L25.6 29.5 V46 Z M18 36.5 V43 H21 V36.5 Z"/>
+    <path d="M38.4 46 V29.5 L40 28.5 L49.5 34.5 V46 Z M43 36.5 V43 H46 V36.5 Z"/>
+    <rect x="11" y="48.5" width="42" height="3.2" rx="1"/>
+  </g>
+</svg>

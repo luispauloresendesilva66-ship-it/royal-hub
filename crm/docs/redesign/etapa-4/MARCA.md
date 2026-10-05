@@ -59,3 +59,26 @@ Todas são self-hosted (`@fontsource`, subset latin) desde a etapa 3.
 | `public/og.jpg` | 1200×630 | prévia de link no WhatsApp e redes sociais, agora com o símbolo |
 
 O `manifest.webmanifest` e o service worker entram na etapa 6 (`ng add @angular/pwa`), já apontando para esses ícones.
+
+## Logo B: edifício (alternativa)
+
+![Comparativo dos logos](comparativo-logos.png)
+
+Vetorizado do arquivo enviado (`logo-edificio-original.webp`) com potrace, sem redesenhar. É uma torre com agulha e duas alas, sobre a linha do chão, com a palavra "ROYAL HUB" em sans geométrica.
+
+| Peça | Arquivo |
+|---|---|
+| Símbolo (vetor fiel ao original) | `public/marca/edificio-simbolo.svg` |
+| Palavra | `public/marca/edificio-palavra.svg` |
+| Símbolo compacto (16–512px) | `public/marca/edificio-compacto.svg` (fonte: `simbolo-edificio-compacto.svg`) |
+| Favicon, ICO, apple-touch e PWA (normal e maskable) | `docs/redesign/etapa-4/icones-edificio/` |
+
+O componente `<app-marca>` já desenha as duas versões (`variante="coroa" | "edificio"`). No edifício, a cor segue o tema: marinho no claro, ouro e branco no escuro.
+
+**A ou B, qual escolher:**
+- **A (coroa):** "Royal" literal, atendimento premium. Combina com o ouro e o Cinzel.
+- **B (edifício):** fala de imóvel na hora, é mais moderno, e a palavra em sans conversa com a home V3. O símbolo é mais fino e pede o compacto abaixo de 60px.
+
+**Para trocar para o B (duas mudanças):**
+1. Em `src/app/shared/ui/marca.ts`, troque `MARCA_PADRAO` para `'edificio'`.
+2. Copie `docs/redesign/etapa-4/icones-edificio/*` por cima de `public/` (`favicon.svg` e `favicon.ico` na raiz, o resto em `public/icons/`) e refaça o `og.jpg`.

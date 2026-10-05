@@ -1,7 +1,12 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
+/** Qual logo o app usa. Para trocar a marca do site e do CRM, mude só aqui (e os ícones, ver docs/redesign/etapa-4/MARCA.md). */
+export type VarianteMarca = 'coroa' | 'edificio';
+export const MARCA_PADRAO: VarianteMarca = 'coroa';
+
 /**
- * A marca do Royal Hub: coroa-casa em dourado + a palavra.
+ * A marca do Royal Hub. Duas versões vetoriais: a coroa-casa em dourado + palavra em Cinzel,
+ * e o edifício (torre com agulha) + palavra em sans.
  * É um desenho vetorial (SVG), então fica nítido em qualquer tamanho, pesa
  * quase nada e funciona no fundo claro e no escuro. O arquivo original da
  * logo está em public/logo-royal.webp.
@@ -11,6 +16,11 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <span class="marca" [class.escuro]="escuro()" [style.--altura.px]="altura()">
+      @if (variante() === 'edificio') {
+        <span class="edificio" [attr.role]="somenteSimbolo() ? 'img' : null" [attr.aria-label]="somenteSimbolo() ? 'Royal Hub' : null"
+              [attr.aria-hidden]="somenteSimbolo() ? null : 'true'"></span>
+        @if (!somenteSimbolo()) { <span class="palavra-edificio" role="img" aria-label="Royal Hub"></span> }
+      } @else {
       <svg class="coroa" viewBox="0 0 120 96" role="img" [attr.aria-label]="somenteSimbolo() ? 'Royal Hub' : null"
            [attr.aria-hidden]="somenteSimbolo() ? null : 'true'" focusable="false">
         <defs>
@@ -49,6 +59,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
       @if (!somenteSimbolo()) {
         <span class="palavra"><b>Royal</b><i>Hub</i></span>
       }
+      }
     </span>
   `,
   styles: `
@@ -62,6 +73,13 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
       b { font-weight: 600; color: var(--cor-titulo); }
       i { font-style: normal; font-weight: 600; color: var(--cor-marca-texto); }
     }
+    /* edifício: o desenho vem do SVG como máscara, então a cor segue o tema */
+    .edificio, .palavra-edificio { display: block; background: currentColor; color: var(--cor-titulo);
+      mask: var(--arte) center / contain no-repeat; -webkit-mask: var(--arte) center / contain no-repeat; }
+    .edificio { --arte: url(/marca/edificio-simbolo.svg); height: var(--altura, 34px); aspect-ratio: 1160 / 1320; }
+    .palavra-edificio { --arte: url(/marca/edificio-palavra.svg); height: calc(var(--altura, 34px) * .42); aspect-ratio: 2080 / 280; }
+    .escuro .edificio { color: var(--ouro-300); }
+    .escuro .palavra-edificio { color: var(--branco); }
     .escuro .palavra {
       b { color: var(--branco); }
       i { color: var(--ouro-300); }
@@ -75,6 +93,8 @@ export class Marca {
   readonly escuro = input(false);
   /** Só a coroa, sem a palavra (ícones e espaços apertados). */
   readonly somenteSimbolo = input(false);
+  /** Coroa (padrão) ou edifício. */
+  readonly variante = input<VarianteMarca>(MARCA_PADRAO);
 
   protected readonly id = 'ouro-' + Math.random().toString(36).slice(2, 8);
 }
