@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Royal Hub · Bot de WhatsApp e CRM para imobiliárias</title>
+<meta name="description" content="Variação 3 (minimalista editorial): tipografia grande em sans, muito respiro, o produto real como imagem e o ouro só como fio.">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+  :root {
+    --marinho-900: oklch(22.1% 0.039 254); --marinho-700: oklch(34.6% 0.074 254);
+    --ouro-500: oklch(72.8% 0.138 86); --ouro-800: oklch(53.5% 0.103 86);
+    --papel: oklch(98.6% 0.003 257); --linha: oklch(90% 0.012 257);
+    --texto: oklch(20.8% 0.040 257); --texto-2: oklch(37.2% 0.039 257); --mudo: oklch(51.4% 0.036 257);
+    --sans: 'IBM Plex Sans', system-ui, sans-serif; --serif: Cinzel, Georgia, serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--papel); color: var(--texto); font: 400 17px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; }
+  a:focus-visible { outline: 2px solid var(--marinho-700); outline-offset: 4px; border-radius: 2px; }
+  h1, h2, h3 { margin: 0; text-wrap: balance; } p { margin: 0; text-wrap: pretty; }
+  .largura { width: min(1200px, 100% - 40px); margin: 0 auto; }
+
+  .topo .largura { display: flex; align-items: center; gap: 32px; min-height: 72px; border-bottom: 1px solid var(--linha); }
+  .marca { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font: 600 14px/1 var(--serif); letter-spacing: .14em; color: var(--marinho-900); }
+  .marca svg { height: 26px; width: auto; } .marca i { font-style: normal; color: var(--ouro-800); }
+  .topo nav { margin-left: auto; display: flex; gap: 28px; font-size: 15px; }
+  .topo nav a { text-decoration: none; color: var(--texto-2); } .topo nav a:hover { color: var(--texto); text-decoration: underline; text-underline-offset: 4px; }
+
+  .link-acao { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; border-radius: 999px; background: var(--marinho-900); color: #fff;
+    text-decoration: none; font-weight: 500; font-size: 16px; transition: transform .16s cubic-bezier(.23,1,.32,1), background .2s; }
+  .link-acao:hover { background: var(--marinho-700); } .link-acao:active { transform: scale(.98); }
+  .link-acao span { transition: transform .2s cubic-bezier(.23,1,.32,1); } .link-acao:hover span { transform: translateX(3px); }
+
+  .heroi { padding: 96px 0 0; }
+  .heroi h1 { font: 500 clamp(40px, 6.4vw, 84px)/1.02 var(--sans); letter-spacing: -.035em; max-width: 13ch; }
+  .heroi h1 em { font-style: italic; font-weight: 400; color: var(--marinho-700); }
+  .heroi .linha-sub { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 32px; align-items: end; margin-top: 40px; padding-bottom: 56px; }
+  .heroi .apoio { font-size: 20px; color: var(--texto-2); max-width: 40ch; }
+  .vitrine { margin: 0; position: relative; }
+  .vitrine img { width: 100%; border-radius: 10px 10px 0 0; border: 1px solid var(--linha); border-bottom: 0; box-shadow: 0 -20px 60px oklch(22% 0.039 254 / .08); }
+  .vitrine::before { content: ''; position: absolute; left: 0; top: -1px; width: 96px; height: 3px; background: var(--ouro-500); z-index: 1; }
+
+  .secao { padding: 120px 0; border-top: 1px solid var(--linha); }
+  .secao h2 { font: 500 clamp(30px, 3.8vw, 52px)/1.08 var(--sans); letter-spacing: -.025em; max-width: 18ch; }
+  .passos { list-style: none; margin: 72px 0 0; padding: 0; }
+  .passos li { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 48px; padding: 36px 0; border-top: 1px solid var(--linha); align-items: start; }
+  .passos h3 { font: 500 clamp(24px, 2.4vw, 32px)/1.2 var(--sans); letter-spacing: -.015em; }
+  .passos p { color: var(--texto-2); font-size: 18px; max-width: 46ch; }
+  .passos li figure { margin: 20px 0 0; grid-column: 2; }
+  .passos li figure img { border-radius: 8px; border: 1px solid var(--linha); }
+
+  .beneficios .colunas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px 96px; margin-top: 64px; }
+  .beneficios h3 { font: 600 19px/1.35 var(--sans); }
+  .beneficios p { color: var(--texto-2); margin-top: 8px; max-width: 40ch; }
+
+  .chamada { padding: 140px 0; border-top: 1px solid var(--linha); }
+  .chamada h2 { font: 500 clamp(36px, 5.2vw, 72px)/1.04 var(--sans); letter-spacing: -.035em; max-width: 16ch; }
+  .chamada p { font-size: 20px; color: var(--texto-2); margin: 24px 0 40px; max-width: 44ch; }
+
+  .rodape .largura { display: flex; flex-wrap: wrap; gap: 12px 32px; align-items: center; padding: 28px 0 40px; border-top: 1px solid var(--linha); color: var(--mudo); font-size: 14px; }
+  .rodape p { margin-left: auto; }
+
+  @media (max-width: 860px) {
+    .topo nav a:not(:last-child) { display: none; }
+    .heroi { padding-top: 56px; }
+    .heroi .linha-sub { grid-template-columns: 1fr; gap: 28px; padding-bottom: 40px; }
+    .heroi .apoio { font-size: 18px; }
+    .link-acao { width: 100%; justify-content: center; }
+    .secao { padding: 72px 0; } .chamada { padding: 88px 0; }
+    .passos { margin-top: 40px; } .passos li { grid-template-columns: 1fr; gap: 12px; padding: 28px 0; }
+    .passos li figure { grid-column: 1; }
+    .beneficios .colunas { grid-template-columns: 1fr; gap: 32px; margin-top: 40px; }
+    .rodape p { margin-left: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .link-acao, .link-acao span { transition: none; } }
+</style>
+</head>
+<body>
+<header class="topo">
+  <div class="largura">
+    <a class="marca" href="#" aria-label="Royal Hub, página inicial">
+      <svg viewBox="0 0 120 96" aria-hidden="true"><g stroke="currentColor" fill="currentColor" style="color: oklch(62% 0.118 86)" stroke-width="6" stroke-linecap="round"><path d="M31 61 L60 22 L89 61" fill="none" stroke-width="6.5"/><path d="M19 70 L26 24 L58 81" fill="none"/><path d="M101 70 L94 24 L62 81" fill="none"/><path d="M22 72 C33 81 46 85 57 84" fill="none" stroke-width="4.5"/><path d="M98 72 C87 81 74 85 63 84" fill="none" stroke-width="4.5"/><circle cx="60" cy="13" r="6.5" stroke="none"/><circle cx="26" cy="19" r="6" stroke="none"/><circle cx="94" cy="19" r="6" stroke="none"/><circle cx="60" cy="87" r="7" stroke="none"/><circle cx="17" cy="72" r="5.5" stroke="none"/><circle cx="103" cy="72" r="5.5" stroke="none"/></g></svg>
+      <span>ROYAL <i>HUB</i></span>
+    </a>
+    <nav aria-label="Principal">
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#beneficios">Benefícios</a>
+      <a href="/entrar">Entrar</a>
+    </nav>
+  </div>
+</header>
+
+<main id="conteudo">
+  <section class="heroi" aria-labelledby="t-heroi">
+    <div class="largura">
+      <h1 id="t-heroi">O bot de WhatsApp que <em>atende por você.</em></h1>
+      <div class="linha-sub">
+        <p class="apoio">CRM para imobiliárias: a assistente responde, qualifica e marca a visita. O funil organiza o resto.</p>
+        <a class="link-acao" href="#contato">Quero conhecer <span aria-hidden="true">→</span></a>
+      </div>
+      <figure class="vitrine"><img src="img/conversa.webp" width="828" height="700" fetchpriority="high" alt="A assistente do Royal Hub respondendo uma cliente que viu o anúncio de uma casa no Karaíba."></figure>
+    </div>
+  </section>
+
+  <section id="como-funciona" class="secao" aria-labelledby="t-como">
+    <div class="largura">
+      <h2 id="t-como">Do QR code à visita marcada.</h2>
+      <ol class="passos">
+        <li><h3>Conecte por QR code</h3><p>Em Ajustes, escaneie o código com o celular da imobiliária, como no WhatsApp Web. Leva um minuto e não precisa instalar nada.</p></li>
+        <li><h3>A assistente atende</h3><p>Responde na hora, com o jeito da sua imobiliária. Entende o que o cliente procura e sugere imóveis da carteira.</p></li>
+        <li class="com-imagem"><h3>O funil organiza</h3><div><p>Cada conversa vira lead, com ficha e etapa. Você vê o que está quente e o que parou.</p></div>
+          <figure><img src="img/funil.webp" width="1224" height="840" loading="lazy" alt="Funil de vendas com as colunas Novo, Em contato, Visita, Proposta e Fechado."></figure></li>
+        <li><h3>A carteira vira site</h3><p>Imóveis com fotos e CEP viram páginas públicas para o cliente e o feed que alimenta os portais.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="beneficios" class="secao beneficios" aria-labelledby="t-ben">
+    <div class="largura">
+      <h2 id="t-ben">Ninguém fica sem resposta.</h2>
+      <div class="colunas">
+        <div><h3>Atende de madrugada, no domingo, no feriado.</h3><p>O cliente que chega às 23h recebe resposta às 23h, e a visita já fica na agenda.</p></div>
+        <div><h3>Você assume quando quiser.</h3><p>Pausa a assistente em uma conversa e responde você mesmo. Depois ela volta sozinha.</p></div>
+        <div><h3>A equipe inteira no mesmo número.</h3><p>Cada corretor vê os seus leads. O gerente acompanha tudo pelo painel.</p></div>
+        <div><h3>No navegador e no celular.</h3><p>Sem instalar nada, com modo escuro e acessível por teclado e leitor de tela.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contato" class="chamada" aria-labelledby="t-cta">
+    <div class="largura">
+      <h2 id="t-cta">Veja a assistente atendendo um cliente seu.</h2>
+      <p>Uma conversa rápida no WhatsApp e a gente mostra o Royal Hub com os imóveis da sua imobiliária.</p>
+      <a class="link-acao" href="#">Quero conhecer <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape">
+  <div class="largura">
+    <span class="marca">ROYAL <i>HUB</i></span>
+    <a href="/entrar">Entrar no painel</a>
+    <p>© 2026 Royal Hub. CRM para imobiliárias.</p>
+  </div>
+</footer>
+</body>
+</html>

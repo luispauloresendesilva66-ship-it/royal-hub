@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Royal Hub · Bot de WhatsApp e CRM para imobiliárias</title>
+<meta name="description" content="Variação 2 (protótipo 3D Caminho): um fio de luz percorre as quatro estações do Royal Hub conforme a rolagem.">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --marinho-950: oklch(18.2% 0.031 254); --marinho-900: oklch(22.1% 0.039 254); --marinho-800: oklch(26.7% 0.048 254);
+    --ouro-300: oklch(81.4% 0.110 86); --ouro-500: oklch(72.8% 0.138 86); --ouro-700: oklch(62.0% 0.118 86);
+    --texto: oklch(85.3% 0.023 254); --mudo: oklch(70.8% 0.036 257);
+    --sans: 'IBM Plex Sans', system-ui, sans-serif; --serif: Cinzel, Georgia, serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--marinho-900); color: #fff; font: 400 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; display: block; }
+  a:focus-visible { outline: 2px solid var(--ouro-300); outline-offset: 3px; border-radius: 4px; }
+  h1, h2, h3 { margin: 0; text-wrap: balance; } p { margin: 0; text-wrap: pretty; }
+  #cena { position: fixed; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; }
+
+  .topo { position: fixed; inset: 0 0 auto; z-index: 20; background: linear-gradient(var(--marinho-900) 55%, transparent); display: flex; align-items: center; justify-content: space-between; padding: 16px clamp(16px, 4vw, 48px); }
+  .marca { display: inline-flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; font: 600 15px/1 var(--serif); letter-spacing: .12em; }
+  .marca svg { height: 30px; width: auto; } .marca i { font-style: normal; color: var(--ouro-300); }
+  .entrar { color: var(--ouro-300); border: 1px solid color-mix(in oklch, var(--ouro-300) 60%, transparent); border-radius: 6px; padding: 10px 18px; text-decoration: none; font-size: 14px; font-weight: 500; }
+  .entrar:hover { background: var(--ouro-300); color: var(--marinho-900); }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 24px; border-radius: 6px; text-decoration: none; font: 600 15px/1 var(--sans);
+    background: linear-gradient(160deg, var(--ouro-300), var(--ouro-500) 60%, var(--ouro-700)); color: var(--marinho-900); transition: transform .16s cubic-bezier(.23,1,.32,1); }
+  .btn:active { transform: scale(.98); }
+
+  /* a história: cada estação ocupa uma tela de rolagem; o texto é HTML real, o canvas só ilustra */
+  .historia { position: relative; z-index: 2; }
+  .estacao { min-height: 100dvh; display: grid; align-items: end; padding: 0 clamp(16px, 4vw, 48px) 12vh; }
+  .estacao .cartao { width: min(1080px, 100%); margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: end;
+    transform: translateY(32px); transition: transform .7s cubic-bezier(.23,1,.32,1); }
+  .estacao.vista .cartao { opacity: 1; transform: none; }
+  .estacao h2 { font: 600 clamp(28px, 3.6vw, 44px)/1.15 var(--serif); }
+  .estacao p { color: var(--texto); font-size: 18px; margin-top: 14px; max-width: 42ch; }
+  .estacao figure { margin: 0; border-radius: 14px; overflow: hidden; box-shadow: 0 30px 80px oklch(0% 0 0 / .45), 0 0 0 1px oklch(100% 0 0 / .1); }
+  .abertura { align-items: center; padding-bottom: 0; text-align: left; }
+  .abertura .cartao { grid-template-columns: minmax(0, 1fr); opacity: 1; transform: none; }
+  .abertura h1 { font: 600 clamp(36px, 5.4vw, 66px)/1.1 var(--serif); max-width: 16ch; }
+  .abertura h1 em { font-style: normal; color: var(--ouro-300); }
+  .abertura p { font-size: 19px; max-width: 46ch; }
+  .abertura .btn { margin-top: 32px; width: fit-content; }
+  /* véu para o texto ficar legível com o fio de luz passando atrás */
+  .historia::before { content: ''; position: fixed; inset: 40% 0 0; z-index: -1; pointer-events: none; background: linear-gradient(transparent, color-mix(in oklch, var(--marinho-900) 85%, transparent) 60%); }
+
+  .trilha { position: fixed; right: clamp(16px, 4vw, 48px); top: 50%; transform: translateY(-50%); z-index: 3; margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; text-align: right; }
+  .trilha a { color: color-mix(in oklch, var(--texto) 50%, transparent); text-decoration: none; font-size: 13px; font-weight: 500; transition: color .3s; }
+  .trilha a[aria-current=step] { color: var(--ouro-300); }
+
+  /* depois da história: chão sólido, o canvas fica para trás */
+  .solido { position: relative; z-index: 4; background: var(--marinho-900); }
+  .beneficios { padding: 120px clamp(16px, 4vw, 48px) 96px; }
+  .beneficios .largura { width: min(1080px, 100%); margin: 0 auto; }
+  .beneficios h2 { font: 600 clamp(28px, 3.2vw, 40px)/1.15 var(--serif); max-width: 20ch; }
+  .beneficios ul { list-style: none; padding: 0; margin: 48px 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 64px; }
+  .beneficios li { border-top: 1px solid color-mix(in oklch, var(--ouro-500) 35%, transparent); padding-top: 20px; color: var(--texto); }
+  .beneficios li b { display: block; color: #fff; font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+  .chamada { padding: 96px clamp(16px, 4vw, 48px); text-align: center; background: var(--marinho-950);
+    background-image: radial-gradient(50% 80% at 50% 100%, color-mix(in oklch, var(--ouro-500) 14%, transparent), transparent 70%); }
+  .chamada h2 { font: 600 clamp(28px, 3.4vw, 42px)/1.15 var(--serif); max-width: 22ch; margin: 0 auto; }
+  .chamada p { color: var(--texto); margin: 14px auto 32px; max-width: 46ch; }
+  .rodape { padding: 28px clamp(16px, 4vw, 48px); background: var(--marinho-950); border-top: 1px solid oklch(100% 0 0 / .08); color: var(--mudo); font-size: 14px;
+    display: flex; flex-wrap: wrap; gap: 12px 32px; align-items: center; }
+  .rodape a { color: var(--texto); } .rodape p { margin-left: auto; }
+
+  @media (max-width: 860px) {
+    .trilha { display: none; }
+    .estacao { padding-top: 88px; }
+    .estacao .cartao { grid-template-columns: 1fr; gap: 24px; }
+    .estacao figure { max-height: 52dvh; }
+    .estacao p, .abertura p { font-size: 16.5px; }
+    .abertura .btn { width: 100%; }
+    .beneficios ul { grid-template-columns: 1fr; gap: 28px; }
+    .rodape p { margin-left: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .estacao .cartao { transition: none; opacity: 1; transform: none; } .btn { transition: none; } }
+</style>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js" } }</script>
+</head>
+<body>
+<canvas id="cena" aria-hidden="true"></canvas>
+
+<header class="topo">
+  <a class="marca" href="#" aria-label="Royal Hub, página inicial">
+    <svg viewBox="0 0 120 96" aria-hidden="true"><g stroke="currentColor" fill="currentColor" style="color: oklch(81.4% 0.110 86)" stroke-width="6" stroke-linecap="round"><path d="M31 61 L60 22 L89 61" fill="none" stroke-width="6.5"/><path d="M19 70 L26 24 L58 81" fill="none"/><path d="M101 70 L94 24 L62 81" fill="none"/><path d="M22 72 C33 81 46 85 57 84" fill="none" stroke-width="4.5"/><path d="M98 72 C87 81 74 85 63 84" fill="none" stroke-width="4.5"/><circle cx="60" cy="13" r="6.5" stroke="none"/><circle cx="26" cy="19" r="6" stroke="none"/><circle cx="94" cy="19" r="6" stroke="none"/><circle cx="60" cy="87" r="7" stroke="none"/><circle cx="17" cy="72" r="5.5" stroke="none"/><circle cx="103" cy="72" r="5.5" stroke="none"/></g></svg>
+    <span>ROYAL <i>HUB</i></span>
+  </a>
+  <a class="entrar" href="/entrar">Entrar</a>
+</header>
+
+<nav aria-label="Etapas"><ol class="trilha">
+  <li><a href="#conectar">Conectar</a></li><li><a href="#atender">Atender</a></li><li><a href="#organizar">Organizar</a></li><li><a href="#publicar">Publicar</a></li>
+</ol></nav>
+
+<main id="conteudo">
+  <div class="historia">
+    <section class="estacao abertura" aria-labelledby="t-heroi">
+      <div class="cartao">
+        <h1 id="t-heroi">O bot de WhatsApp que <em>atende por você.</em></h1>
+        <p>CRM para imobiliárias: a assistente responde, qualifica e marca a visita. O funil organiza o resto.</p>
+        <a class="btn" href="#contato">Quero conhecer</a>
+      </div>
+    </section>
+    <section id="conectar" class="estacao" data-t="0.1" aria-labelledby="t-1">
+      <div class="cartao"><div><h2 id="t-1">Conecte por QR code.</h2><p>Em Ajustes, escaneie o código com o celular da imobiliária, como no WhatsApp Web. Leva um minuto.</p></div></div>
+    </section>
+    <section id="atender" class="estacao" data-t="0.38" aria-labelledby="t-2">
+      <div class="cartao"><div><h2 id="t-2">A assistente atende.</h2><p>Responde na hora, com o jeito da sua imobiliária, e sugere imóveis da carteira.</p></div>
+        <figure><img src="img/conversa.webp" width="828" height="700" loading="lazy" alt="A assistente conversando com uma cliente interessada em uma casa."></figure></div>
+    </section>
+    <section id="organizar" class="estacao" data-t="0.64" aria-labelledby="t-3">
+      <div class="cartao"><div><h2 id="t-3">O funil organiza.</h2><p>Cada conversa vira lead com ficha e etapa. Você vê o que está quente e o que parou.</p></div>
+        <figure><img src="img/funil.webp" width="1224" height="840" loading="lazy" alt="Funil com colunas Novo, Em contato, Visita, Proposta e Fechado."></figure></div>
+    </section>
+    <section id="publicar" class="estacao" data-t="0.86" aria-labelledby="t-4">
+      <div class="cartao"><div><h2 id="t-4">A carteira vira site.</h2><p>Imóveis com fotos e CEP viram páginas públicas e o feed dos portais.</p></div>
+        <figure><img src="img/imoveis.webp" width="1224" height="600" loading="lazy" alt="Carteira de imóveis com preço e situação para os portais."></figure></div>
+    </section>
+  </div>
+
+  <div class="solido">
+    <section class="beneficios" aria-labelledby="t-ben">
+      <div class="largura">
+        <h2 id="t-ben">Ninguém fica sem resposta.</h2>
+        <ul>
+          <li><b>Atende de madrugada, no domingo, no feriado.</b>O cliente que chega às 23h recebe resposta às 23h.</li>
+          <li><b>Você assume quando quiser.</b>Pausa a assistente em uma conversa e ela volta sozinha depois.</li>
+          <li><b>A equipe inteira no mesmo número.</b>Cada corretor vê os seus leads; o gerente vê tudo.</li>
+          <li><b>No navegador e no celular.</b>Sem instalar nada, com modo escuro e acessível por teclado.</li>
+        </ul>
+      </div>
+    </section>
+    <section id="contato" class="chamada" aria-labelledby="t-cta">
+      <h2 id="t-cta">Veja a assistente atendendo um cliente seu.</h2>
+      <p>Uma conversa rápida no WhatsApp e a gente mostra o Royal Hub com os imóveis da sua imobiliária.</p>
+      <a class="btn" href="#">Quero conhecer</a>
+    </section>
+    <footer class="rodape">
+      <span class="marca">ROYAL <i>HUB</i></span>
+      <a href="/entrar">Entrar no painel</a>
+      <p>© 2026 Royal Hub. CRM para imobiliárias.</p>
+    </footer>
+  </div>
+</main>
+
+<script type="module">
+// Estações aparecem quando entram na tela (sem ouvir o scroll para isso).
+const estacoes = [...document.querySelectorAll('.estacao[data-t]')];
+const links = [...document.querySelectorAll('.trilha a')];
+let alvoT = 0;
+const io = new IntersectionObserver((es) => { for (const e of es) if (e.isIntersecting) {
+  e.target.classList.add('vista'); alvoT = +e.target.dataset.t;
+  links.forEach((a) => a.hash === '#' + e.target.id ? a.setAttribute('aria-current', 'step') : a.removeAttribute('aria-current'));
+} }, { threshold: .55 });
+estacoes.forEach((s) => io.observe(s));
+document.querySelector('.abertura').addEventListener('focusin', () => (alvoT = 0));
+new IntersectionObserver(([e]) => { if (e.isIntersecting) alvoT = 0; }, { threshold: .5 }).observe(document.querySelector('.abertura'));
+
+// A cena 3D só carrega depois do texto, e não carrega com "reduzir movimento".
+const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (!reduz) requestIdleCallback?.(iniciar) ?? setTimeout(iniciar, 200);
+
+async function iniciar() {
+  const THREE = await import('three');
+  const canvas = document.getElementById('cena');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2)); renderer.setClearColor(0x0F1B2D, 1);
+  const scene = new THREE.Scene(); scene.fog = new THREE.Fog(0x0F1B2D, 3, 15);
+  const camera = new THREE.PerspectiveCamera(50, 1, .1, 60);
+  const curva = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(-5.5, .3, -16), new THREE.Vector3(-1.5, 0, -11.5), new THREE.Vector3(2.6, .35, -7.5),
+    new THREE.Vector3(-1.2, .1, -3.6), new THREE.Vector3(1.4, 0, .2), new THREE.Vector3(.2, .25, 3.4)], false, 'catmullrom', .5);
+  scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(curva.getPoints(600)), new THREE.LineBasicMaterial({ color: 0xE0BE6B, transparent: true, opacity: .22 })));
+  const marcos = [.1, .38, .64, .86];
+  const anelGeo = new THREE.TorusGeometry(.62, .011, 10, 120);
+  for (const t of marcos) { const p = curva.getPointAt(t), d = curva.getTangentAt(t);
+    for (const [k, o] of [[1, 1], [1.14, .25]]) { const a = new THREE.Mesh(anelGeo, new THREE.MeshBasicMaterial({ color: 0xE0BE6B, transparent: o < 1, opacity: o }));
+      a.position.copy(p); a.scale.setScalar(k); a.lookAt(p.clone().add(d)); scene.add(a); } }
+  const N = innerWidth < 760 ? 450 : 900;
+  const t0 = Float32Array.from({ length: N }, Math.random), raio = Float32Array.from({ length: N }, () => Math.pow(Math.random(), .6) * .42), ang = Float32Array.from({ length: N }, () => Math.random() * 6.283);
+  const pos = new Float32Array(N * 3), geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  const tela = document.createElement('canvas'); tela.width = tela.height = 64; const g = tela.getContext('2d'); const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+  gr.addColorStop(0, 'rgba(255,245,215,1)'); gr.addColorStop(.35, 'rgba(255,235,180,.7)'); gr.addColorStop(1, 'rgba(255,220,140,0)'); g.fillStyle = gr; g.fillRect(0, 0, 64, 64);
+  scene.add(new THREE.Points(geo, new THREE.PointsMaterial({ size: .06, map: new THREE.CanvasTexture(tela), color: 0xE0BE6B, transparent: true, opacity: .9, blending: THREE.AdditiveBlending, depthWrite: false })));
+  const ajustar = () => { renderer.setSize(innerWidth, innerHeight, false); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); };
+  addEventListener('resize', ajustar); ajustar();
+  const P = new THREE.Vector3(), T = new THREE.Vector3(), Nn = new THREE.Vector3(), B = new THREE.Vector3(), cima = new THREE.Vector3(0, 1, 0), olhar = new THREE.Vector3();
+  const relogio = new THREE.Clock(); let t = 0;
+  // pausa o desenho quando a cena sai da tela (benefícios em diante)
+  let visivel = true; new IntersectionObserver(([e]) => (visivel = e.isIntersecting)).observe(document.querySelector('.historia'));
+  renderer.setAnimationLoop(() => {
+    if (!visivel) return;
+    const tempo = relogio.getElapsedTime(); t += (alvoT - t) * .04;
+    for (let i = 0; i < N; i++) { const u = (t0[i] + tempo * .022) % 1; curva.getPointAt(u, P); curva.getTangentAt(u, T);
+      Nn.crossVectors(T, cima).normalize(); B.crossVectors(T, Nn).normalize();
+      let ap = 1; for (const m of marcos) ap = Math.min(ap, .25 + Math.min(1, Math.abs(u - m) / .05));
+      const r = raio[i] * ap, a = ang[i] + tempo * .3;
+      pos[i*3] = P.x + (Nn.x * Math.cos(a) + B.x * Math.sin(a)) * r; pos[i*3+1] = P.y + (Nn.y * Math.cos(a) + B.y * Math.sin(a)) * r; pos[i*3+2] = P.z + (Nn.z * Math.cos(a) + B.z * Math.sin(a)) * r; }
+    geo.attributes.position.needsUpdate = true;
+    curva.getPointAt(t * .95, P); curva.getTangentAt(t * .95, T);
+    camera.position.copy(P).addScaledVector(T, -2.9); camera.position.y += 1.7;
+    curva.getPointAt(Math.min(1, t * .95 + .1), olhar); camera.lookAt(olhar);
+    renderer.render(scene, camera);
+  });
+}
+</script>
+</body>
+</html>
