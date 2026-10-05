@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Royal Hub, símbolo compacto: coroa de três pontas cuja ponta central é o telhado de uma casa
+       (com beiral e janela de quatro vidros). Para 16 a 512px: favicon e ícone de app. -->
+  <defs>
+    <linearGradient id="o" x1="0" y1="0" x2="0.15" y2="1">
+      <stop offset="0" stop-color="#E7C77A"/><stop offset="1" stop-color="#C9A227"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#0F1B2D"/>
+  <g fill="url(#o)">
+    <path d="M12.5 46 L9.5 20 L20.5 30 L16.5 30 L32 12.5 L47.5 30 L43.5 30 L54.5 20 L51.5 46 Z"/>
+    <rect x="12.5" y="48.5" width="39" height="4.5" rx="2.25"/>
+    <circle cx="9.5" cy="18.5" r="3.4"/><circle cx="54.5" cy="18.5" r="3.4"/>
+  </g>
+  <g fill="#0F1B2D">
+    <rect x="27.2" y="31" width="4.3" height="4.3" rx=".6"/><rect x="32.5" y="31" width="4.3" height="4.3" rx=".6"/>
+    <rect x="27.2" y="36.3" width="4.3" height="4.3" rx=".6"/><rect x="32.5" y="36.3" width="4.3" height="4.3" rx=".6"/>
+  </g>
+</svg>

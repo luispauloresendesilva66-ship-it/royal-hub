@@ -1,28 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 96">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Royal Hub, símbolo compacto: coroa de três pontas cuja ponta central é o telhado de uma casa
+       (com beiral e janela de quatro vidros). Para 16 a 512px: favicon e ícone de app. -->
   <defs>
-    <linearGradient id="ouro" x1="0" y1="0" x2="0.2" y2="1">
-      <stop offset="0" stop-color="#E0BE6B" />
-      <stop offset="0.55" stop-color="#C9A227" />
-      <stop offset="1" stop-color="#A97E1E" />
+    <linearGradient id="o" x1="0" y1="0" x2="0.15" y2="1">
+      <stop offset="0" stop-color="#E7C77A"/><stop offset="1" stop-color="#C9A227"/>
     </linearGradient>
   </defs>
-  <g stroke="url(#ouro)" fill="url(#ouro)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M20 66 L27 27 L44 50 L60 21 L76 50 L93 27 L100 66" fill="none" />
-    <path d="M44 52 L59 74" fill="none" stroke-width="6" />
-    <path d="M76 52 L61 74" fill="none" stroke-width="6" />
-    <path d="M24 70 C36 79 47 79 55 75" fill="none" stroke-width="6" />
-    <path d="M96 70 C84 79 73 79 65 75" fill="none" stroke-width="6" />
-    <circle cx="60" cy="14" r="7.5" stroke="none" />
-    <circle cx="26" cy="21" r="6.5" stroke="none" />
-    <circle cx="94" cy="21" r="6.5" stroke="none" />
-    <circle cx="60" cy="78" r="8" stroke="none" />
-    <circle cx="19" cy="70" r="6.5" stroke="none" />
-    <circle cx="101" cy="70" r="6.5" stroke="none" />
-    <g stroke="none">
-      <rect x="52" y="39" width="6.5" height="6.5" rx="1" />
-      <rect x="61.5" y="39" width="6.5" height="6.5" rx="1" />
-      <rect x="52" y="48.5" width="6.5" height="6.5" rx="1" />
-      <rect x="61.5" y="48.5" width="6.5" height="6.5" rx="1" />
-    </g>
+  <rect width="64" height="64" rx="14" fill="#0F1B2D"/>
+  <g fill="url(#o)">
+    <path d="M12.5 46 L9.5 20 L20.5 30 L16.5 30 L32 12.5 L47.5 30 L43.5 30 L54.5 20 L51.5 46 Z"/>
+    <rect x="12.5" y="48.5" width="39" height="4.5" rx="2.25"/>
+    <circle cx="9.5" cy="18.5" r="3.4"/><circle cx="54.5" cy="18.5" r="3.4"/>
+  </g>
+  <g fill="#0F1B2D">
+    <rect x="27.2" y="31" width="4.3" height="4.3" rx=".6"/><rect x="32.5" y="31" width="4.3" height="4.3" rx=".6"/>
+    <rect x="27.2" y="36.3" width="4.3" height="4.3" rx=".6"/><rect x="32.5" y="36.3" width="4.3" height="4.3" rx=".6"/>
   </g>
 </svg>
