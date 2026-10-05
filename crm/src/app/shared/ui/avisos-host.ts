@@ -28,20 +28,20 @@ import { AvisosService } from '../../core/ui/avisos.service';
     </dialog>
   `,
   styles: `
-    .avisos { position: fixed; right: 16px; bottom: 16px; z-index: 1000; display: flex; flex-direction: column; gap: 8px; max-width: min(420px, calc(100vw - 32px)); }
+    .avisos { position: fixed; right: 16px; bottom: 16px; z-index: var(--z-aviso); display: flex; flex-direction: column; gap: var(--esp-2); max-width: min(420px, calc(100vw - 32px)); }
     .aviso-flutuante {
-      display: flex; align-items: center; gap: 10px; padding: 10px 8px 10px 14px; border-radius: var(--raio);
-      background: var(--inverso-fundo); color: var(--inverso-texto); box-shadow: var(--sombra-forte); font-size: 13px;
-      &.erro { background: var(--erro-forte); color: #fff; }
+      display: flex; align-items: center; gap: var(--esp-2-5); padding: var(--esp-2-5) var(--esp-2) var(--esp-2-5) var(--esp-3-5); border-radius: var(--raio);
+      background: var(--cor-inverso-fundo); color: var(--cor-inverso-texto); box-shadow: var(--sombra-3); font-size: var(--texto-xs);
+      &.erro { background: var(--cor-erro-forte); color: var(--branco); }
       span { flex: 1; }
-      .btn { color: inherit; } .btn:hover { background: rgba(127, 127, 127, .2); }
+      .btn { color: inherit; } .btn:hover { background: color-mix(in oklch, currentColor 20%, transparent); }
     }
     .confirmar {
-      border: 1px solid var(--slate-200); border-radius: 10px; padding: 20px; width: min(420px, calc(100vw - 32px));
-      background: var(--superficie); color: var(--slate-900); box-shadow: var(--sombra-forte);
-      &::backdrop { background: var(--veu); }
-      h2 { font-size: 16px; margin-bottom: 8px; }
-      p { color: var(--slate-600); margin-bottom: 18px; }
+      border: 1px solid var(--cor-borda); border-radius: var(--raio-lg); padding: var(--esp-5); width: min(420px, calc(100vw - 32px));
+      background: var(--cor-superficie); color: var(--cor-texto); box-shadow: var(--sombra-3);
+      &::backdrop { background: var(--cor-veu); }
+      h2 { font-size: var(--texto-md); margin-bottom: var(--esp-2); }
+      p { color: var(--cor-texto-3); margin-bottom: var(--esp-5); }
       p:empty { display: none; }
     }
   `,

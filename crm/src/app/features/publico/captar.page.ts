@@ -63,17 +63,17 @@ import { emailValido, focarPrimeiroErro } from '../../shared/util/validacao';
     </main>
   `,
   styles: `
-    :host { display: block; min-height: 100dvh; background: var(--navy-900); padding: clamp(16px, 5vw, 48px) 16px; }
-    .captar { max-width: 460px; margin: 0 auto; background: #fff; border-radius: 12px; padding: 28px clamp(18px, 5vw, 32px);
-      display: flex; flex-direction: column; gap: 10px; }
-    .marca { font: 500 11.5px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--ouro-texto); }
-    h1 { font-family: var(--serif); font-weight: 600; font-size: 25px; letter-spacing: .01em; color: var(--navy-900); }
-    .apoio { color: var(--slate-600); margin-bottom: 8px; }
-    .btn.primario { min-height: 48px; font-size: 15px; width: 100%; }
-    input, textarea { font-size: 16px !important; } /* evita o zoom automático do iPhone */
-    .opcional { font-weight: 400; color: var(--slate-500); }
-    .lgpd { font-size: 12px; color: var(--slate-500); text-align: center; }
-    .pronto { display: flex; flex-direction: column; gap: 10px; }
+    :host { display: block; min-height: 100dvh; background: var(--cor-fundo-marca); padding: clamp(16px, 5vw, 48px) 16px; }
+    .captar { max-width: 460px; margin: 0 auto; background: var(--branco); border-radius: var(--raio-lg); padding: 28px clamp(18px, 5vw, 32px);
+      display: flex; flex-direction: column; gap: var(--esp-2-5); }
+    .marca { font: 500 var(--texto-2xs)/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--cor-marca-texto); }
+    h1 { font-family: var(--serif); font-weight: 600; font-size: var(--texto-3xl); letter-spacing: .01em; color: var(--cor-titulo); }
+    .apoio { color: var(--cor-texto-3); margin-bottom: var(--esp-2); }
+    .btn.primario { min-height: 48px; font-size: var(--texto-md); width: 100%; }
+    input, textarea { font-size: var(--texto-md) !important; } /* evita o zoom automático do iPhone */
+    .opcional { font-weight: 400; color: var(--cor-texto-mudo); }
+    .lgpd { font-size: var(--texto-xs); color: var(--cor-texto-mudo); text-align: center; }
+    .pronto { display: flex; flex-direction: column; gap: var(--esp-2-5); }
   `,
 })
 export default class CaptarPage {

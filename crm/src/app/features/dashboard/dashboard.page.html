@@ -16,7 +16,7 @@
   <section class="metricas" aria-label="Resumo">
     <app-metrica rotulo="Leads no mês" [valor]="p.no_mes" [detalhe]="p.total + ' no total'" rota="/leads" [destaque]="true" />
     <app-metrica rotulo="Quentes agora" [valor]="p.quentes" detalhe="prioridade de contato" rota="/leads"
-                 [params]="{ temperatura: 'quente' }" cor="var(--perda)" />
+                 [params]="{ temperatura: 'quente' }" cor="var(--cor-perda)" />
     <app-metrica rotulo="Em atendimento" [valor]="p.abertos" [detalhe]="(p.em_aberto | brl) + ' em negociação'" rota="/pipeline" />
     <app-metrica rotulo="Conversão" [valor]="conversao() + '%'" [detalhe]="p.fechados + ' fechado(s)'" />
     <app-metrica rotulo="Carteira" [valor]="p.imoveis" [detalhe]="(p.vgv | brl) + ' em VGV'"
@@ -44,7 +44,7 @@
         @for (f of funil(); track f.slug) {
           <li>
             <span class="nome">{{ f.nome }}</span>
-            <span class="trilho" aria-hidden="true"><span [style.width.%]="(f.quantidade / maxFunil()) * 100" [style.background]="f.cor"></span></span>
+            <span class="trilho" aria-hidden="true"><span class="cor-etapa" [style.width.%]="(f.quantidade / maxFunil()) * 100" [style.--cor-etapa]="f.cor"></span></span>
             <span class="qtd mono">{{ f.quantidade }}</span>
             <span class="valor mono mudo">{{ f.valor_total | brl }}</span>
           </li>

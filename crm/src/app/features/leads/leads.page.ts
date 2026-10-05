@@ -172,5 +172,5 @@ export default class LeadsPage {
   }
 
   protected nomeEtapa(slug: string) { return this.pipeline.nomeDaEtapa(slug); }
-  protected corEtapa(slug: string) { return this.pipeline.etapasCache().find((e) => e.slug === slug)?.cor ?? '#64748B'; }
+  protected corEtapa(slug: string) { return this.pipeline.etapasCache().find((e) => e.slug === slug)?.cor ?? 'var(--cor-texto-mudo)'; }
 }

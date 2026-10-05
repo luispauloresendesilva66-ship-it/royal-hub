@@ -19,7 +19,7 @@ import { Vitrine } from './vitrine';
       <p class="publico-vazio" role="status">Carregando…</p>
     }
   `,
-  styles: `.publico-vazio { padding: 48px 20px; text-align: center; color: var(--slate-600); }`,
+  styles: `.publico-vazio { padding: var(--esp-12) var(--esp-5); text-align: center; color: var(--cor-texto-3); }`,
 })
 export default class SitePublicoPage {
   readonly slug = input.required<string>();

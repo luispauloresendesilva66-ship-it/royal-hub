@@ -24,16 +24,16 @@ import { RouterLink } from '@angular/router';
   styles: `
     :host { display: block; min-width: 0; }
     .metrica {
-      display: flex; flex-direction: column; gap: 4px; height: 100%; padding: 14px 16px;
-      background: var(--superficie); border: 1px solid var(--slate-200); border-radius: var(--raio);
-      box-shadow: var(--sombra); color: inherit; text-decoration: none;
-      &.destaque { border-top: 3px solid var(--ouro-500); padding-top: 12px; }
+      display: flex; flex-direction: column; gap: var(--esp-1); height: 100%; padding: var(--esp-3-5) var(--esp-4);
+      background: var(--cor-superficie); border: 1px solid var(--cor-borda); border-radius: var(--raio);
+      box-shadow: var(--sombra-1); color: inherit; text-decoration: none;
+      &.destaque { border-top: 3px solid var(--cor-marca); padding-top: var(--esp-3); }
     }
-    a.metrica:hover { border-color: var(--slate-300); background: var(--superficie-hover); }
-    .rotulo { font: 500 10.5px/1.2 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--slate-600); }
-    .valor { font: 500 27px/1.1 var(--mono); letter-spacing: -.02em; color: var(--navy-900); }
-    .detalhe { font-size: 12px; color: var(--slate-500); }
-    @media (max-width: 400px) { .metrica { padding: 10px 12px; } .valor { font-size: 22px; } }
+    a.metrica:hover { border-color: var(--cor-borda-forte); background: var(--cor-superficie-hover); }
+    .rotulo { font: 500 var(--texto-2xs)/1.2 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--cor-texto-3); }
+    .valor { font: 500 var(--texto-4xl)/1.1 var(--mono); letter-spacing: -.02em; color: var(--cor-titulo); }
+    .detalhe { font-size: var(--texto-xs); color: var(--cor-texto-mudo); }
+    @media (max-width: 400px) { .metrica { padding: var(--esp-2-5) var(--esp-3); } .valor { font-size: var(--texto-2xl); } }
   `,
 })
 export class Metrica {
