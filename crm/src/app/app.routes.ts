@@ -6,7 +6,7 @@ const t = (nome: string) => `${nome} · Royal CRM`;
 
 export const routes: Routes = [
   // ---------------------------------------------------------------- públicas
-  { path: '', pathMatch: 'full', title: 'Royal Hub · CRM para imobiliárias', canActivate: [inicioGuard], loadComponent: () => import('./features/inicio/inicio.page') },
+  { path: '', pathMatch: 'full', title: 'Royal Hub · Bot de WhatsApp e CRM para imobiliárias', canActivate: [inicioGuard], loadComponent: () => import('./features/inicio/inicio.page') },
   { path: 'entrar', title: t('Entrar'), canActivate: [deslogadoGuard], loadComponent: () => import('./features/auth/entrar.page') },
   { path: 'redefinir-senha', title: t('Nova senha'), loadComponent: () => import('./features/auth/redefinir-senha.page') },
   { path: 'captar/:empresa', title: 'Fale com a gente', loadComponent: () => import('./features/publico/captar.page') },
