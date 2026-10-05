@@ -16,7 +16,7 @@
       @for (item of dia(); track item.rota) {
         <li>
           <a [routerLink]="item.rota" routerLinkActive="ativo" ariaCurrentWhenActive="page">
-            {{ item.rotulo }}
+            <app-icone [nome]="item.icone" [tamanho]="18" /><span class="rotulo">{{ item.rotulo }}</span>
             @if (item.rota === '/conversas' && naoLidas()) {
               <span class="contador" aria-label="{{ naoLidas() }} mensagens não lidas">{{ naoLidas() }}</span>
             }
@@ -28,7 +28,7 @@
       <p class="grupo" id="grupo-gestao">Gestão</p>
       <ul aria-labelledby="grupo-gestao">
         @for (item of gestao(); track item.rota) {
-          <li><a [routerLink]="item.rota" routerLinkActive="ativo" ariaCurrentWhenActive="page">{{ item.rotulo }}</a></li>
+          <li><a [routerLink]="item.rota" routerLinkActive="ativo" ariaCurrentWhenActive="page"><app-icone [nome]="item.icone" [tamanho]="18" /><span class="rotulo">{{ item.rotulo }}</span></a></li>
         }
       </ul>
     }
@@ -38,9 +38,22 @@
       <span class="papel">{{ rotuloPapel(auth.papel() ?? '') }} · {{ auth.empresa()?.nome }}</span>
       <app-botao-tema [claro]="true" />
       <button type="button" class="sair" (click)="auth.sair()">Sair</button>
+      <button type="button" class="dica-atalhos" (click)="atalhos.showModal()"><app-icone nome="teclado" /> Atalhos <kbd>?</kbd></button>
     </div>
   </nav>
 </header>
+
+<dialog #atalhos class="atalhos" aria-labelledby="t-atalhos" (click)="$event.target === atalhos && atalhos.close()">
+  <h2 id="t-atalhos">Atalhos de teclado</h2>
+  <dl>
+    <dt><kbd>/</kbd></dt><dd>Buscar na tela</dd>
+    <dt><kbd>n</kbd></dt><dd>Novo lead</dd>
+    @for (item of itens(); track item.rota) { @if (item.tecla) { <dt><kbd>g</kbd> <kbd>{{ item.tecla }}</kbd></dt><dd>{{ item.rotulo }}</dd> } }
+    <dt><kbd>?</kbd></dt><dd>Esta lista</dd>
+    <dt><kbd>Esc</kbd></dt><dd>Fechar gaveta ou janela</dd>
+  </dl>
+  <form method="dialog"><button class="btn">Fechar</button></form>
+</dialog>
 
 <main id="conteudo" #conteudo tabindex="-1" class="conteudo">
   <router-outlet />

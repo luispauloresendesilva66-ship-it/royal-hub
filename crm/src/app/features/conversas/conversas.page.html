@@ -64,8 +64,10 @@
           @if (whats(c); as w) { <a class="btn pequeno fantasma" [href]="w" target="_blank" rel="noopener">Abrir no WhatsApp</a> }
         </div>
       </header>
-      <div class="estado pequeno">
-        <span class="etiqueta" [class]="estado(c).classe">{{ estado(c).texto }}</span>
+      <div class="estado pequeno" [class.pausada]="pausada(c)" [class.ativa]="estado(c).classe === 'ok'">
+        <span class="etiqueta sem-ponto" [class]="estado(c).classe">
+          <app-icone [nome]="estado(c).classe === 'ok' ? 'assistente' : pausada(c) ? 'pausa' : 'pessoa'" [tamanho]="14" />{{ estado(c).texto }}
+        </span>
         @if (pausada(c)) {
           <span>até {{ c.pausado_ate | quando }}</span>
           <button type="button" class="btn fantasma pequeno" (click)="retomarAgora(c)">Devolver à assistente</button>
@@ -84,7 +86,10 @@
       <ol class="mensagens" #caixa tabindex="0" aria-label="Mensagens" aria-live="polite">
         @for (m of mensagens(); track m.id) {
           <li class="msg" [class]="m.de">
-            <span class="autor">{{ m.de === 'cliente' ? (c.nome || 'Cliente') : m.de === 'bot' ? 'Assistente' : 'Você' }} · {{ m.criado_em | quando }}</span>
+            <span class="autor">
+              @if (m.de !== 'cliente') { <app-icone [nome]="m.de === 'bot' ? 'assistente' : 'pessoa'" [tamanho]="13" /> }
+              <b>{{ m.de === 'cliente' ? (c.nome || 'Cliente') : m.de === 'bot' ? 'Assistente' : 'Você' }}</b> {{ m.criado_em | quando }}
+            </span>
             <p>{{ m.texto }}</p>
           </li>
         } @empty { <li class="mudo pequeno">Sem mensagens.</li> }

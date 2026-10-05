@@ -11,10 +11,12 @@
     &:has(input:focus-visible) { box-shadow: var(--foco); } input { width: 18px; height: 18px; } }
 }
 .corpo { padding: var(--esp-2-5) var(--esp-3); display: flex; flex-direction: column; gap: var(--esp-1); flex: 1;
-  .preco { font-size: var(--texto-lg); font-weight: 500; small { font-size: var(--texto-xs); color: var(--cor-texto-mudo); } }
+  .preco { font-family: var(--sans); font-size: var(--texto-lg); font-weight: var(--peso-forte); letter-spacing: -.01em; small { font-size: var(--texto-xs); color: var(--cor-texto-mudo); } }
   h2 { font-size: var(--texto-xs); font-weight: 500; }
   .specs { display: flex; flex-wrap: wrap; gap: var(--esp-1) var(--esp-2-5); font-size: var(--texto-xs); }
   .situacao { display: flex; flex-wrap: wrap; gap: var(--esp-1); margin-top: var(--esp-1); .etiqueta { font-size: var(--texto-2xs); white-space: normal; } }
 }
 .acoes-card { display: flex; flex-wrap: wrap; gap: var(--esp-1); padding: var(--esp-2) var(--esp-2-5); border-top: 1px solid var(--cor-borda-suave); }
 .mostrar-mais { display: flex; justify-content: center; padding: var(--esp-5) 0 var(--esp-1-5); }
+.acoes-card { align-items: center; .empurra { flex: 1; } }
+.cartao-esqueleto { height: 330px; border-radius: var(--raio); }

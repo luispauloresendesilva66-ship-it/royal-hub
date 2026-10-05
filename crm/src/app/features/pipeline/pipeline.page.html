@@ -25,7 +25,7 @@
 @if (erro()) {
   <p class="aviso erro" role="alert">{{ erro() }} <button type="button" class="btn pequeno" (click)="carregar()">Tentar de novo</button></p>
 } @else if (carregando() && !etapas().length) {
-  <p class="vazio" role="status">Carregando o funil…</p>
+  <div class="quadro" role="status" aria-label="Carregando o funil">@for (i of [1, 2, 3, 4, 5, 6]; track i) { <span class="esqueleto coluna-esqueleto"></span> }</div>
 }
 
 <div class="quadro" cdkDropListGroup [attr.aria-busy]="carregando()">
@@ -36,7 +36,7 @@
           <h2 [id]="'col-' + col.etapa.slug">{{ col.etapa.nome }}</h2>
           <span class="qtd mono" [attr.aria-label]="col.cards.length + ' leads'">{{ col.cards.length }}</span>
           <button type="button" class="btn fantasma pequeno mais" (click)="novo(col.etapa.slug)"
-                  [attr.aria-label]="'Novo lead em ' + col.etapa.nome">+</button>
+                  [attr.aria-label]="'Novo lead em ' + col.etapa.nome"><app-icone nome="mais" /></button>
         </div>
         <p class="valores mono">{{ col.total | brl }}
           @if (col.etapa.tipo === 'aberta') { <span class="mudo" title="Valor × chance de fechar">· {{ col.ponderado | brl }} ({{ col.etapa.probabilidade }}%)</span> }
@@ -61,10 +61,10 @@
               }
               <span class="setas">
                 @if (vizinha(col.etapa, -1); as ant) {
-                  <button type="button" class="seta" (click)="moverPara(l, ant)" [attr.aria-label]="'Mover ' + l.nome + ' para ' + ant.nome" [title]="'Mover para ' + ant.nome">←</button>
+                  <button type="button" class="seta" (click)="moverPara(l, ant)" [attr.aria-label]="'Mover ' + l.nome + ' para ' + ant.nome" [title]="'Mover para ' + ant.nome"><app-icone nome="anterior" [tamanho]="14" /></button>
                 }
                 @if (vizinha(col.etapa, 1); as prox) {
-                  <button type="button" class="seta" (click)="moverPara(l, prox)" [attr.aria-label]="'Mover ' + l.nome + ' para ' + prox.nome" [title]="'Mover para ' + prox.nome">→</button>
+                  <button type="button" class="seta" (click)="moverPara(l, prox)" [attr.aria-label]="'Mover ' + l.nome + ' para ' + prox.nome" [title]="'Mover para ' + prox.nome"><app-icone nome="proximo" [tamanho]="14" /></button>
                 }
               </span>
             </div>

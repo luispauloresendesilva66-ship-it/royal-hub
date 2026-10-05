@@ -84,7 +84,8 @@ img { max-width: 100%; }
   display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between;
   gap: var(--esp-3) var(--esp-6); margin-bottom: var(--esp-6);
   /* o título da tela usa a letra da marca — o resto da interface segue em sans, para ler rápido */
-  h1 { font-family: var(--serif); font-weight: 600; font-size: var(--texto-3xl); letter-spacing: .005em; color: var(--cor-titulo); }
+  /* Cinzel fica só na marca (etapa 4); o título da tela é Plex Sans, mais rápido de ler */
+  h1 { font: var(--peso-forte) var(--texto-3xl)/var(--altura-titulo) var(--sans); letter-spacing: -.02em; color: var(--cor-titulo); }
   p { color: var(--cor-texto-mudo); margin-top: var(--esp-1-5); max-width: 72ch; }
   .acoes { display: flex; flex-wrap: wrap; gap: var(--esp-2); }
 }
@@ -101,7 +102,8 @@ img { max-width: 100%; }
   min-height: var(--alvo); padding: 0 var(--esp-3-5); border-radius: var(--raio-sm);
   border: 1px solid var(--cor-borda-forte); background: var(--cor-superficie); color: var(--cor-texto);
   font: 500 var(--texto-xs)/1 var(--sans); letter-spacing: .012em; text-decoration: none; cursor: pointer; white-space: nowrap;
-  transition: background .12s, border-color .12s;
+  transition: background var(--dur-rapida), border-color var(--dur-rapida), transform var(--dur-rapida) var(--curva-saida);
+  &:active:not(:disabled) { transform: scale(.98); }
   &:hover { background: var(--cor-superficie-baixa); border-color: var(--cor-borda-controle-hover); }
   &:disabled { opacity: .55; cursor: not-allowed; }
   &.primario { background: var(--cor-acao); border-color: var(--cor-acao); color: var(--cor-sobre-acao);
@@ -112,6 +114,7 @@ img { max-width: 100%; }
     &:hover { background: var(--cor-perda-fundo); } }
   &.pequeno { min-height: 30px; padding: 0 var(--esp-2-5); font-size: var(--texto-xs); }
   &.icone { padding: 0; width: var(--alvo); }
+  &.pequeno.icone { width: 30px; }
 }
 
 /* ---------------------------------------------------------------- campos */
@@ -203,7 +206,23 @@ table.tabela {
 .vazio {
   padding: var(--esp-7) var(--esp-4); text-align: center; color: var(--cor-texto-mudo);
   border: 1px dashed var(--cor-borda-forte); border-radius: var(--raio); background: var(--cor-superficie);
+  display: flex; flex-direction: column; align-items: center; gap: var(--esp-2);
+  > app-icone { color: var(--cor-texto-desativado); }
+  > strong { color: var(--cor-texto); font-weight: var(--peso-forte); }
 }
+
+/* ------------------------------------------------- esqueleto (carregando)
+   Blocos cinza no formato do conteúdo que vai chegar: a tela não pula. */
+.esqueleto { display: block; border-radius: var(--raio-sm); background: var(--cor-superficie-funda); }
+@media (prefers-reduced-motion: no-preference) {
+  .esqueleto { background: linear-gradient(90deg, var(--cor-superficie-funda) 30%, var(--cor-superficie-baixa) 50%, var(--cor-superficie-funda) 70%) 0 0 / 300% 100%;
+    animation: brilho-esqueleto 1.4s linear infinite; }
+}
+@keyframes brilho-esqueleto { to { background-position: -150% 0; } }
+
+/* tecla de atalho */
+kbd { display: inline-block; min-width: 22px; padding: 1px var(--esp-1-5); border: 1px solid var(--cor-borda-forte); border-bottom-width: 2px;
+  border-radius: var(--raio-xs); background: var(--cor-superficie); font: var(--peso-medio) var(--texto-2xs)/1.5 var(--mono); text-align: center; color: var(--cor-texto-2); }
 .aviso {
   padding: var(--esp-2-5) var(--esp-3-5); border-radius: var(--raio); border: 1px solid var(--cor-alerta-borda);
   background: var(--cor-alerta-fundo); color: var(--cor-alerta); font-size: var(--texto-xs);

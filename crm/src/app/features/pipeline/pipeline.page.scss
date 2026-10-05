@@ -1,7 +1,8 @@
 .so-meus { display: inline-flex; align-items: center; gap: var(--esp-1-5); min-height: var(--alvo); font-size: var(--texto-xs); cursor: pointer; }
 
 .quadro {
-  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(240px, 1fr); gap: var(--esp-3);
+  /* 184px por coluna: as 6 etapas cabem em 1440 sem rolar para o lado (A2 da auditoria) */
+  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(184px, 1fr); gap: var(--esp-2-5);
   overflow-x: auto; padding-bottom: var(--esp-3); align-items: start;
 }
 .coluna {
@@ -49,3 +50,4 @@
   .coluna { scroll-snap-align: start; max-height: none; }
   .seta { width: 36px; height: 36px; }
 }
+.coluna-esqueleto { height: 420px; border-radius: var(--raio); }

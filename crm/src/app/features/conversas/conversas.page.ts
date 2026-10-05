@@ -11,10 +11,11 @@ import { erroAmigavel } from '../../core/supabase/supabase.client';
 import { QuandoPipe, TelefonePipe } from '../../shared/pipes/formatos.pipe';
 import { linkWhats } from '../../shared/util/telefone';
 import { semAcento } from '../../shared/util/planilha';
+import { Icone } from '../../shared/ui/icone';
 
 @Component({
   selector: 'app-conversas',
-  imports: [FormsModule, RouterLink, QuandoPipe, TelefonePipe],
+  imports: [FormsModule, RouterLink, QuandoPipe, TelefonePipe, Icone],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './conversas.page.html',
   styleUrl: './conversas.page.scss',

@@ -9,10 +9,11 @@ import { BrlPipe } from '../../shared/pipes/brl.pipe';
 import { semAcento } from '../../shared/util/planilha';
 import { ImovelGaveta } from './components/imovel-gaveta';
 import { ImportarImoveis } from './components/importar-imoveis';
+import { Icone } from '../../shared/ui/icone';
 
 @Component({
   selector: 'app-imoveis',
-  imports: [FormsModule, BrlPipe, ImovelGaveta, ImportarImoveis],
+  imports: [FormsModule, BrlPipe, ImovelGaveta, ImportarImoveis, Icone],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './imoveis.page.html',
   styleUrl: './imoveis.page.scss',
