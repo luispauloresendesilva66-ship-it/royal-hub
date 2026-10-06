@@ -6,40 +6,18 @@
 </header>
 
 @if (!carregado()) { <p class="mudo" role="status">Carregando…</p> } @else {
-<div class="duas">
-  <section class="cartao" aria-labelledby="t-imob">
-    <h2 id="t-imob">Imobiliária</h2>
-    <form class="pilha" (ngSubmit)="salvarImobiliaria()">
-      <div class="campo">
-        <label for="a-empresa">Nome</label>
-        <input id="a-empresa" name="empresa" [(ngModel)]="nomeEmpresa" />
-      </div>
-      <div class="grade-campos">
-        <div class="campo"><label for="a-corretor">Corretor responsável</label><input id="a-corretor" name="corretor" [(ngModel)]="f.corretor" /></div>
-        <div class="campo"><label for="a-creci">CRECI</label><input id="a-creci" name="creci" [(ngModel)]="f.creci" /></div>
-      </div>
-      <div class="grade-campos">
-        <div class="campo">
-          <label for="a-whats">WhatsApp</label>
-          <input id="a-whats" name="whats" appMascara="telefone" [(ngModel)]="f.whats" placeholder="(34) 99999-0000" aria-describedby="a-whats-ajuda" />
-          <span class="ajuda" id="a-whats-ajuda">Aparece nas páginas públicas e na folha.</span>
-        </div>
-        <div class="campo">
-          <label for="a-cidade">Cidade</label>
-          <input id="a-cidade" name="cidade" [(ngModel)]="f.cidade" aria-describedby="a-cidade-ajuda" />
-          <span class="ajuda" id="a-cidade-ajuda">Vem preenchida no cadastro de imóvel.</span>
-        </div>
-      </div>
-      <div class="campo"><label for="a-end">Endereço do escritório</label><input id="a-end" name="endereco" [(ngModel)]="f.endereco" /></div>
-      <div><button class="btn primario" type="submit" [disabled]="salvando()">Salvar</button></div>
-    </form>
-  </section>
-
-  <section class="cartao" aria-labelledby="t-wa">
+<section class="cartao whatsapp" aria-labelledby="t-wa">
     <header>
       <h2 id="t-wa">WhatsApp</h2>
       <span class="etiqueta" [class.ok]="waLigado()" [class.frio]="!waLigado()">{{ estadoWa() }}</span>
     </header>
+    <ol class="passos-wa" aria-label="Situação da ligação">
+      @for (p of passosWa(); track p; let i = $index) {
+        <li [class.feito]="etapaWa() > i + 1" [class.atual]="etapaWa() === i + 1" [attr.aria-current]="etapaWa() === i + 1 ? 'step' : null">
+          <span class="marcador" aria-hidden="true">@if (etapaWa() > i + 1) { <app-icone nome="ok" [tamanho]="18" /> } @else { {{ i + 1 }} }</span>{{ p }}
+        </li>
+      }
+    </ol>
     <div class="campo">
       <label for="w-canal">Como está ligado</label>
       <select id="w-canal" name="canal" [ngModel]="f.wa_canal" (ngModelChange)="mudarCanal($event)" aria-describedby="w-canal-ajuda">
@@ -146,9 +124,36 @@
       </details>
     }
   </section>
-</div>
 
-<div class="duas">
+<div class="duas ajustes-grade">
+  <section class="cartao imobiliaria" aria-labelledby="t-imob">
+    <h2 id="t-imob">Imobiliária</h2>
+    <form class="pilha" (ngSubmit)="salvarImobiliaria()">
+      <div class="campo">
+        <label for="a-empresa">Nome</label>
+        <input id="a-empresa" name="empresa" [(ngModel)]="nomeEmpresa" />
+      </div>
+      <div class="grade-campos">
+        <div class="campo"><label for="a-corretor">Corretor responsável</label><input id="a-corretor" name="corretor" [(ngModel)]="f.corretor" /></div>
+        <div class="campo"><label for="a-creci">CRECI</label><input id="a-creci" name="creci" [(ngModel)]="f.creci" /></div>
+      </div>
+      <div class="grade-campos">
+        <div class="campo">
+          <label for="a-whats">WhatsApp</label>
+          <input id="a-whats" name="whats" appMascara="telefone" [(ngModel)]="f.whats" placeholder="(34) 99999-0000" aria-describedby="a-whats-ajuda" />
+          <span class="ajuda" id="a-whats-ajuda">Aparece nas páginas públicas e na folha.</span>
+        </div>
+        <div class="campo">
+          <label for="a-cidade">Cidade</label>
+          <input id="a-cidade" name="cidade" [(ngModel)]="f.cidade" aria-describedby="a-cidade-ajuda" />
+          <span class="ajuda" id="a-cidade-ajuda">Vem preenchida no cadastro de imóvel.</span>
+        </div>
+      </div>
+      <div class="campo"><label for="a-end">Endereço do escritório</label><input id="a-end" name="endereco" [(ngModel)]="f.endereco" /></div>
+      <div><button class="btn primario" type="submit" [disabled]="salvando()">Salvar</button></div>
+    </form>
+  </section>
+
   <section class="cartao" aria-labelledby="t-cap">
     <h2 id="t-cap">Captação de leads</h2>
     <div class="pilha">

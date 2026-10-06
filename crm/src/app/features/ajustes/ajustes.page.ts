@@ -10,11 +10,12 @@ import { SUPABASE } from '../../core/supabase/supabase.client';
 import { AvisosService } from '../../core/ui/avisos.service';
 import { QuandoPipe } from '../../shared/pipes/formatos.pipe';
 import { MascaraDirective } from '../../shared/ui/mascara.directive';
+import { Icone } from '../../shared/ui/icone';
 
 /** Ajustes da imobiliária numa página só: dados, WhatsApp oficial, captação e portais. */
 @Component({
   selector: 'app-ajustes',
-  imports: [FormsModule, RouterLink, MascaraDirective, QuandoPipe],
+  imports: [FormsModule, RouterLink, MascaraDirective, QuandoPipe, Icone],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './ajustes.page.html',
   styleUrl: './ajustes.page.scss',
@@ -66,6 +67,16 @@ export default class AjustesPage {
   protected readonly conectando = signal(false);
   protected waLigado() {
     return this.f.wa_canal === 'evolution' ? this.evoLigada() : this.f.wa_canal === 'ponte' ? this.ponteViva() : !!this.f.wa_configurado;
+  }
+  /** Os três passos da ligação, conforme o canal: escolher, conectar, pronto. */
+  protected passosWa() {
+    return ['Escolha como ligar', this.f.wa_canal === 'oficial' ? 'Cole os dados da Meta' : 'Escaneie o QR code', 'Pronto para atender'];
+  }
+  /** Em que passo a ligação está (1 a 3; 4 = tudo feito). */
+  protected etapaWa() {
+    if (this.waLigado()) return 4;
+    if (this.f.wa_canal === 'oficial') return 2;
+    return this.qrImagem() ? 2 : 1;
   }
   protected estadoWa() {
     if (this.f.wa_canal === 'evolution') return this.evoLigada() ? 'Ligado' : this.qrFresco() ? 'Escaneie o QR' : 'Desligado';

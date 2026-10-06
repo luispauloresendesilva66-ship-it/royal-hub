@@ -51,3 +51,4 @@
   .conversas.com-selecao .conversa { display: flex; }
   .so-celular { display: inline-flex; }
 }
+.esqueleto-lista { display: flex; flex-direction: column; gap: var(--esp-2); .esqueleto { height: 58px; } }
