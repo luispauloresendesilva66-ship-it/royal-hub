@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 /** Qual logo o app usa. Para trocar a marca do site e do CRM, mude só aqui (e os ícones, ver docs/redesign/etapa-4/MARCA.md). */
 export type VarianteMarca = 'coroa' | 'edificio';
-export const MARCA_PADRAO: VarianteMarca = 'coroa';
+export const MARCA_PADRAO: VarianteMarca = 'edificio';
 
 /**
  * A marca do Royal Hub. Duas versões vetoriais: a coroa-casa em dourado + palavra em Cinzel,
