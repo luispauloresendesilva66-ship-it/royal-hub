@@ -11,3 +11,18 @@ ul.lista { max-height: 300px; overflow-y: auto; }
   img { background: var(--branco); padding: var(--esp-2); border-radius: var(--raio); border: 1px solid var(--cor-borda); flex: none; }
   > div { display: flex; flex-direction: column; gap: var(--esp-1-5); min-width: 200px; flex: 1; }
   .passos { margin: 0; } }
+
+/* WhatsApp no topo, largura toda: é a ligação que faz o produto funcionar (A7 da auditoria) */
+.whatsapp { margin-bottom: var(--esp-4); }
+.passos-wa { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--esp-2);
+  li { display: flex; align-items: center; gap: var(--esp-2-5); padding: var(--esp-2-5) var(--esp-3); border-radius: var(--raio-sm);
+    background: var(--cor-superficie-baixa); color: var(--cor-texto-mudo); font-size: var(--texto-xs); font-weight: var(--peso-medio); }
+  .marcador { flex: none; width: 26px; height: 26px; border-radius: var(--raio-pilula); display: grid; place-items: center;
+    border: 1.5px solid currentColor; font: var(--peso-forte) var(--texto-xs)/1 var(--sans); }
+  li.atual { background: var(--cor-info-fundo); color: var(--cor-info); .marcador { background: var(--cor-info); color: var(--cor-sobre-acao); border-color: var(--cor-info); } }
+  li.feito { background: var(--cor-ganho-fundo); color: var(--cor-ganho); .marcador { border: 0; } } }
+@media (max-width: 760px) { .passos-wa { grid-template-columns: 1fr; } }
+/* os três cartões fluem em duas colunas, cada um com a sua altura */
+.ajustes-grade { align-items: start; }
+/* no cartão largo do WhatsApp, campos com largura de leitura (não 1100px) */
+.whatsapp > .campo, .whatsapp > form, .whatsapp > .aviso, .whatsapp > .qr, .whatsapp > div:has(> .btn) { max-width: 760px; }

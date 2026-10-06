@@ -6,3 +6,4 @@ tr.inativo td { color: var(--cor-texto-mudo); }
 .perfis-ajuda { margin-top: var(--esp-3); summary { cursor: pointer; font-size: var(--texto-xs); font-weight: 500; color: var(--cor-texto-2); } &[open] summary { margin-bottom: var(--esp-2); } }
 .perfis { display: grid; grid-template-columns: max-content 1fr; gap: var(--esp-1-5) var(--esp-5); margin: 0; font-size: var(--texto-xs);
   dt { font-weight: 600; } dd { margin: 0; color: var(--cor-texto-3); } }
+.esqueleto-equipe { display: flex; flex-direction: column; gap: var(--esp-2); .esqueleto { height: 44px; } }

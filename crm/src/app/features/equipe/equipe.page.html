@@ -13,7 +13,7 @@
   <header>
     <h2 id="t-pessoas">Pessoas <span class="mudo">({{ pessoas().length }})</span></h2>
   </header>
-  @if (carregando()) { <p class="mudo" role="status">Carregando…</p> }
+  @if (carregando()) { <div class="esqueleto-equipe" role="status" aria-label="Carregando a equipe">@for (i of [1, 2, 3, 4]; track i) { <span class="esqueleto"></span> }</div> }
   <div class="tabela-rolagem" [attr.aria-busy]="carregando()">
     <table class="tabela">
       <caption class="sr-only">Pessoas com acesso ao sistema</caption>
